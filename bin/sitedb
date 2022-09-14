@@ -1,0 +1,38 @@
+#!/bin/bash
+# allow create | destroy | reset | dump
+set -Eeuo pipefail
+
+usage() {
+  echo "Usage: $0 (create|destroy|reset|users|dump)"
+}
+
+if [ $# -ne 1 ] ; then
+  usage
+  exit 1
+fi
+
+# Parse argument.  $1 is the first argument
+case $1 in
+  "create")
+  ## TODO avoid clobbering an existing database?
+    mkdir -p var/uploads
+    sqlite3 var/db.sqlite3 < sql/schema.sql
+    ;;
+
+  "destroy")
+    rm -rf var/db.sqlite3 var/uploads
+    ;;
+  "reset")
+    rm -rf var/db.sqlite3 var/uploads
+    mkdir -p var/uploads
+    sqlite3 var/db.sqlite3 < sql/schema.sql
+    ;;
+  "users") sqlite3 -batch -line var/db.sqlite3 'select * from users';;
+  "dump")
+    sqlite3 -batch -line var/db.sqlite3 'select * from users'
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac
