@@ -6,9 +6,9 @@ def show_index():
     """render index page"""
     with authserver.app.app_context():
         # logname must exist in session
-        # logname = auth_server.model.check_session()
-        # if not logname:
-            # return flask.redirect("/accounts/login/")
+        logname = authserver.model.check_session()
+        if not logname:
+            return flask.redirect("/login/")
 
         context = {
             # "logname": logname,
