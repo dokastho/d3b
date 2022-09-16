@@ -14,3 +14,4 @@ app.config.from_envvar('SITE_SETTINGS', silent=True)
 
 
 from authserver.views import show_index
+from authserver.api import get_whoami

@@ -31,6 +31,10 @@ def accounts():
                 abort(500)      # server didn't abort
             session['logname'] = uname
 
+        # do not allow creating or deleting without being logged in
+        elif 'logname' not in session:
+            flask.abort(300)
+
         # create an account
         elif operation == "create":
             info = {
@@ -43,7 +47,6 @@ def accounts():
             if not do_create(connection, info):
                 abort(500)      # server didn't abort correctly
 
-            session['logname'] = info['username']
 
         elif operation == "delete":
             do_delete(connection)
