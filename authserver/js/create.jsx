@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 render(
 	<div>
 		<h1>Create An Account</h1>
-		<form action="/accounts/target=create">
+		<form action="/accounts/?target=create">
 			<label htmlFor="username">Username</label>
 			<input type="text" id="username" />
 			<label htmlFor="username">Password</label>

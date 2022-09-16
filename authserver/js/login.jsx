@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 render(
   <div>
 		<h1>Log In</h1>
-		<form action="/accounts/target=/" method="post">
+		<form action="/accounts/?target=/" method="post">
 			<input type="hidden" name="operation" value="login" />
 			<label htmlFor="uname">Username</label><br />
 			<input type="text" name="uname" id="uname" /><br />
