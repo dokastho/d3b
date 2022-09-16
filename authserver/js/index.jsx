@@ -29,8 +29,18 @@ class Index extends React.Component {
     const { logname } = this.state;
     return (
       <div>
-          {logname === "" ? <a href="/accounts/login/">log in</a>
+        {logname === "" ? <a href="/accounts/login/">log in</a>
           : <a href={`/accounts/${logname}/`}>signed in as {logname}</a>}
+
+        <br />
+        <a href="/accounts/create/">Create a new account</a>
+        <br />
+        <form action="/upload/?target=/" method="post" enctype="multipart/form-data">
+          <label htmlFor="schema">DB Schema .sqlite3 file</label><br/>
+          <input type="file" id="schema" name="file" required /><br/>
+          <label htmlFor="dbfile">DB Name</label><br/>
+          <input type="text" id="dbfile" name="dbname" required /><br/>
+        </form>
 
       </div>
     )
