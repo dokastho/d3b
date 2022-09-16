@@ -30,7 +30,7 @@ class Index extends React.Component {
     return (
       <div>
         <h1>Dokasfam Auth Services</h1>
-        <a href={`/accounts/${logname}/`}>signed in as {logname}</a>
+        <a href={`/user/${logname}/`}>signed in as {logname}</a>
         <hr />
         <br />
         

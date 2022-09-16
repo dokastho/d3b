@@ -198,7 +198,7 @@ def login():
 def logout():
     """Log out user and redirects to login."""
     session.clear()
-    return redirect('/accounts/login/')
+    return redirect('/')
 
 
 @authserver.app.route('/accounts/create/', methods=['GET'])

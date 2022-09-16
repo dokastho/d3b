@@ -19,7 +19,7 @@ def show_index():
     return flask.render_template("index.html", **context)
 
 
-@authserver.app.route("/user/<uname>")
+@authserver.app.route("/user/<uname>/")
 def show_user(uname):
     """Show profile options for uname."""
     logname = authserver.model.check_session()
