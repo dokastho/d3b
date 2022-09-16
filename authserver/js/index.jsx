@@ -33,10 +33,9 @@ class Index extends React.Component {
     fetch(`/schema/delete/${id}/`, { credentials: 'same-origin', method: 'POST' })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
-        return response.json();
+        // return response.json();
       })
-      .then((data) => {
-        console.log(data);
+      .then(() => {
         const { schemas } = this.state;
         this.setState({
           schemas: schemas.filter(function(s) { 
@@ -74,7 +73,7 @@ class Index extends React.Component {
 
         {
           schemas.map((s) => (
-            <div className="row">
+            <div className="row" key={s.id}>
               <span>
                 {s.name}&#9;{s.created}&#9;
               </span>

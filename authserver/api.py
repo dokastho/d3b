@@ -68,4 +68,4 @@ def delete_schema(id):
         )
         cur.fetchall()
         
-        return flask.Response(status=200)
+        return flask.Response(status=204)
