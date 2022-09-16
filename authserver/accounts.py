@@ -125,36 +125,6 @@ def do_delete(connection):
 
     uname = session['logname']
 
-    # fetch filenmae from user entry
-    cur = connection.execute(
-        "SELECT filename "
-        "FROM users "
-        "WHERE username == ?",
-        (uname,)
-    )
-    filename = cur.fetchall()
-
-    # delete filename
-    os.remove(os.path.join(
-        authserver.app.config['UPLOAD_FOLDER'],
-        filename[0]['filename'])
-    )
-
-    # fetch all posts owned by uname
-    cur = connection.execute(
-        "SELECT filename "
-        "FROM posts "
-        "WHERE owner == ?",
-        (uname,)
-    )
-    posts = cur.fetchall()
-
-    for post in posts:
-        os.remove(os.path.join(
-            authserver.app.config['UPLOAD_FOLDER'],
-            post['filename'])
-        )
-
     # delete users entry and all related ones
     cur = connection.execute(
         "DELETE FROM users "
