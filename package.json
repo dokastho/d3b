@@ -1,0 +1,50 @@
+{
+  "name": "rsite",
+  "version": "0.1.0",
+  "description": "rsite front end",
+  "main": "rsite/js/resume.jsx",
+  "author": "awdeorio",
+  "license": "MIT",
+  "repository": {},
+  "devDependencies": {
+    "@babel/core": "^7.19.1",
+    "@babel/eslint-parser": ">=7.15.7",
+    "@babel/plugin-transform-runtime": ">=7.15.0",
+    "@babel/preset-env": ">=7.15.6",
+    "@babel/preset-react": ">=7.14.5",
+    "@babel/runtime": ">=7.15.4",
+    "babel-loader": "^8.2.5",
+    "eslint-config-airbnb": ">=18.2.1",
+    "eslint-plugin-import": ">=2.24.2",
+    "eslint-plugin-jsx-a11y": ">=6.4.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": ">=4.2.0",
+    "webpack": "^5.72.1",
+    "webpack-cli": ">=4.8.0"
+  },
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "chromedriver": "^98.0.0",
+    "eslint": "^7.5.0",
+    "js-cookie": "^3.0.1",
+    "moment": "^2.29.3",
+    "node": "^17.4.0",
+    "prop-types": ">=15.7.2",
+    "react": ">=17.0.2",
+    "react-bulma-components": "^4.1.0",
+    "react-dom": ">=17.0.2",
+    "react-ellipsis-text": "^1.2.1",
+    "react-infinite-scroll-component": ">=6.1.0",
+    "react-router-dom": "^6.3.0",
+    "semantic-ui-react": "^2.1.2"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

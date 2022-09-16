@@ -35,11 +35,11 @@ class Index extends React.Component {
         <br />
         <a href="/accounts/create/">Create a new account</a>
         <br />
-        <form action="/upload/?target=/" method="post" enctype="multipart/form-data">
-          <label htmlFor="schema">DB Schema .sqlite3 file</label><br/>
-          <input type="file" id="schema" name="file" required /><br/>
-          <label htmlFor="dbfile">DB Name</label><br/>
-          <input type="text" id="dbfile" name="dbname" required /><br/>
+        <form action="/schema/?target=/" method="post" enctype="multipart/form-data">
+          <label htmlFor="file">DB Schema .sqlite3 file</label><br/>
+          <input type="file" id="file" name="file" required /><br/>
+          <label htmlFor="dbname">DB Name</label><br/>
+          <input type="text" id="dbname" name="dbname" required /><br/>
         </form>
 
       </div>
