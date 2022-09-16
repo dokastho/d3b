@@ -9,7 +9,7 @@ def show_index():
         # logname must exist in session
         logname = authserver.model.check_session()
         if not logname:
-            return flask.redirect("/login/")
+            return flask.redirect("/accounts/login/")
 
         context = {
             # "logname": logname,
@@ -19,7 +19,7 @@ def show_index():
     return flask.render_template("index.html", **context)
 
 
-@authserver.app.route("/schema/", method=["POST"])
+@authserver.app.route("/schema/", methods=["POST"])
 def upload_schema():
     with insta485.app.app_context():
         connection = authserver.model.get_db()

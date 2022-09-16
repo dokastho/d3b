@@ -13,5 +13,7 @@ app.config.from_object('authserver.config')
 app.config.from_envvar('SITE_SETTINGS', silent=True)
 
 
-from authserver.views import show_index
-from authserver.api import get_whoami
+from authserver.views import *
+from authserver.accounts import *
+from authserver.api import *
+from authserver.model import *

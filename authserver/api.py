@@ -2,7 +2,7 @@ import authserver
 import flask
 
 
-@authserver.app.route('/api/v1/whoami', method="POST")
+@authserver.app.route('/api/v1/whoami/', methods=["POST"])
 def get_whoami():
     """Return a json with logname"""
 
