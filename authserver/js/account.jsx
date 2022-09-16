@@ -8,8 +8,8 @@ render(
       <input type="submit" value="logout" />
     </form>
     <br />
-    <a href="/accounts/?target=password">Change password</a><br />
-    <a href="/accounts/?target=delete">Delete account</a><br />
+    <a href="/accounts/password/">Change password</a><br />
+    <a href="/accounts/delete/">Delete account</a><br />
   </div>,
   document.getElementById("reactEntry"),
 );
