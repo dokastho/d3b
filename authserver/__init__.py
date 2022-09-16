@@ -17,3 +17,4 @@ from authserver.views import *
 from authserver.accounts import *
 from authserver.api import *
 from authserver.model import *
+from authserver.schema import *
