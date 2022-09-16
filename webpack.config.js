@@ -5,6 +5,7 @@ module.exports = {
   entry: {
     account: './authserver/js/account.jsx',
     delete: './authserver/js/delete.jsx',
+    create: './authserver/js/create.jsx',
     index: './authserver/js/index.jsx',
     login: './authserver/js/login.jsx',
     password: './authserver/js/password.jsx',

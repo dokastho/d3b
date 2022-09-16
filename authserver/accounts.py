@@ -33,13 +33,11 @@ def accounts():
 
         # do not allow creating or deleting without being logged in
         elif 'logname' not in session:
-            flask.abort(300)
+            flask.abort(403)
 
         # create an account
         elif operation == "create":
             info = {
-                "file": request.files.get('file'),
-                "name": request.form.get("fullname"),
                 "username": request.form.get("username"),
                 "email": request.form.get("email"),
                 "password": request.form.get("password")
@@ -89,7 +87,6 @@ def do_create(connection, info):
     local = utc.to('US/Pacific')
     timestamp = local.format()
 
-    pp_str = authserver.model.get_uuid(info['file'].filename)
     pw_str = create_hashed_password(info['password'])
 
     cur = connection.execute(
@@ -102,17 +99,13 @@ def do_create(connection, info):
     if len(user) != 0:
         abort(409)
 
-    # save image
-    path = authserver.app.config["UPLOAD_FOLDER"]/pp_str
-    info['file'].save(path)
 
     cur = connection.execute(
         "INSERT INTO users "
-        "(username, fullname, email, filename, password, created) "
-        "VALUES (?, ?, ?, ?, ?, ?)",
+        "(username, email, password, created) "
+        "VALUES (?, ?, ?, ?)",
         (
-            info['username'], info['name'], info['email'],
-            pp_str, pw_str, timestamp
+            info['username'], info['email'], pw_str, timestamp,
         )
     )
     cur.fetchall()
@@ -211,8 +204,6 @@ def logout():
 @authserver.app.route('/accounts/create/', methods=['GET'])
 def create():
     """Render create page if not logged in."""
-    if 'logname' in session:
-        return redirect('/')
 
     return render_template('create.html')
 
