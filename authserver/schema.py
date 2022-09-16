@@ -4,14 +4,14 @@ import flask
 
 @authserver.app.route("/schema/", methods=["POST"])
 def upload_schema():
-    with insta485.app.app_context():
+    with authserver.app.app_context():
         connection = authserver.model.get_db()
 
-        # logname must exist in session
+        # logname must exist in flask.session
         logname = ""
-        if 'logname' not in session:
+        if 'logname' not in flask.session:
             return redirect("/accounts/login/")
-        logname = session['logname']
+        logname = flask.session['logname']
 
         target = flask.request.args.get('target')
         if target is None or target == "":
@@ -19,10 +19,10 @@ def upload_schema():
 
         operation = flask.request.form.get('operation')
         if operation == "create":
-            fileobj = flask.request.files.get('schema')  # or file
+            fileobj = flask.request.files.get('file')
             filename = flask.request.form.get('dbname')
             if fileobj is None:
-                abort(400)
+                flask.abort(400)
 
             # save image
             fileid = authserver.model.get_uuid(fileobj.filename)
@@ -50,9 +50,9 @@ def upload_schema():
             )
             post = cur.fetchall()
             if len(post) == []:
-                abort(404)
+                flask.abort(404)
             elif post[0]['owner'] != logname:
-                abort(403)
+                flask.abort(403)
             post = post[0]
 
             # remove file
@@ -71,7 +71,7 @@ def upload_schema():
             cur.fetchall()
 
         else:
-            abort(400)
+            flask.abort(400)
 
-    return redirect(target)
+    return flask.redirect(target)
     

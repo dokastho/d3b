@@ -5,7 +5,8 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      logname: ""
+      logname: "",
+      schemas: {}
     }
   }
 
@@ -26,7 +27,7 @@ class Index extends React.Component {
 
 
   render() {
-    const { logname } = this.state;
+    const { logname, schemas } = this.state;
     return (
       <div>
         <h1>Dokasfam Auth Services</h1>
@@ -40,11 +41,16 @@ class Index extends React.Component {
         <br />
         <h3>Upload DB Schema</h3>
         <form action="/schema/?target=/" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="operation" value="create" />
           <label htmlFor="file">DB Schema .sqlite3 file</label><br/>
           <input type="file" id="file" name="file" required /><br/>
           <label htmlFor="dbname">DB Name</label><br/>
           <input type="text" id="dbname" name="dbname" required /><br/>
         </form>
+
+        {
+          // schemas.map()
+        }
 
       </div>
     )

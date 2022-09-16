@@ -9,7 +9,7 @@ SECRET_KEY = (b'\x8a\xac\xb5\xd4\x19\xe6\xef',
 # File Upload to var/uploads/
 SITE_ROOT = pathlib.Path(__file__).resolve().parent.parent
 UPLOAD_FOLDER = SITE_ROOT/'var'/'uploads'
-ALLOWED_EXTENSIONS = set(['sql'])
+ALLOWED_EXTENSIONS = set(['sqlite3'])
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 # Database file is var/db.sqlite3
 DATABASE_FILENAME = SITE_ROOT/'var'/'db.sqlite3'
