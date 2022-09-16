@@ -29,12 +29,16 @@ class Index extends React.Component {
     const { logname } = this.state;
     return (
       <div>
-        {logname === "" ? <a href="/accounts/login/">log in</a>
-          : <a href={`/accounts/${logname}/`}>signed in as {logname}</a>}
+        <h1>Dokasfam Auth Services</h1>
+        <a href={`/accounts/${logname}/`}>signed in as {logname}</a>
+        <hr />
+        <br />
+        
 
         <br />
         <a href="/accounts/create/">Create a new account</a>
         <br />
+        <h3>Upload DB Schema</h3>
         <form action="/schema/?target=/" method="post" enctype="multipart/form-data">
           <label htmlFor="file">DB Schema .sqlite3 file</label><br/>
           <input type="file" id="file" name="file" required /><br/>

@@ -17,6 +17,7 @@ case $1 in
   ## TODO avoid clobbering an existing database?
     mkdir -p var/uploads
     sqlite3 var/db.sqlite3 < sql/schema.sql
+    sqlite3 var/db.sqlite3 < sql/data.sql
     ;;
 
   "destroy")
@@ -26,6 +27,7 @@ case $1 in
     rm -rf var/db.sqlite3 var/uploads
     mkdir -p var/uploads
     sqlite3 var/db.sqlite3 < sql/schema.sql
+    sqlite3 var/db.sqlite3 < sql/data.sql
     ;;
   "users") sqlite3 -batch -line var/db.sqlite3 'select * from users';;
   "dump")
