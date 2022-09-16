@@ -1,3 +1,11 @@
 body {
     padding: .1em;
 }
+
+.row {
+    display: flex;
+}
+
+.deletebtn {
+    margin-left: 10px;
+}

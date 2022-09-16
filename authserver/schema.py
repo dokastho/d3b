@@ -10,7 +10,7 @@ def upload_schema():
         # logname must exist in flask.session
         logname = ""
         if 'logname' not in flask.session:
-            return redirect("/accounts/login/")
+            return flask.redirect("/accounts/login/")
         logname = flask.session['logname']
 
         target = flask.request.args.get('target')
@@ -37,38 +37,6 @@ def upload_schema():
                 (logname, filename, fileid,)
             )
             cur.fetchone()
-
-        elif operation == "delete":
-            uploadid = flask.request.form.get('id')
-
-            # get post, delete filename, delete post
-            cur = connection.execute(
-                "SELECT * "
-                "FROM schemas "
-                "WHERE id == ?",
-                (uploadid,)
-            )
-            post = cur.fetchall()
-            if len(post) == []:
-                flask.abort(404)
-            elif post[0]['owner'] != logname:
-                flask.abort(403)
-            post = post[0]
-
-            # remove file
-            os.remove(os.path.join(
-                authserver.app.config['UPLOAD_FOLDER'],
-                post['fileid'])
-            )
-
-            # delete entry
-            cur = connection.execute(
-                "DELETE "
-                "FROM schemas "
-                "WHERE id == ?",
-                (uploadid,)
-            )
-            cur.fetchall()
 
         else:
             flask.abort(400)

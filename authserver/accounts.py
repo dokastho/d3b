@@ -33,7 +33,7 @@ def accounts():
 
         # do not allow creating or deleting without being logged in
         elif 'logname' not in session:
-            flask.abort(403)
+            abort(403)
 
         # create an account
         elif operation == "create":
