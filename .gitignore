@@ -128,4 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 *.bundle.js
-node_modules/*
+**/node_modules/*
