@@ -8,8 +8,6 @@ class Index extends React.Component {
       logname: "",
       schemas: []
     }
-
-    // this.deleteSchema = this.deleteSchema.bind(this);
   }
 
   componentDidMount() {
