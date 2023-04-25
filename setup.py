@@ -21,7 +21,7 @@ setup(
     install_requires=[
         'arrow',
         'bs4',
-        'Flask',
+        'flask',
         'html5validator',
         'pycodestyle',
         'pydocstyle',
