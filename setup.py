@@ -8,9 +8,9 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name='authserver',
+    name='schemaserver',
     version='0.1.0',
-    packages=['authserver'],
+    packages=['schemaserver'],
     author="Thomas Dokas",
     author_email="dokastho@umich.edu",
     url="https://github.com/dokastho/auth_server",

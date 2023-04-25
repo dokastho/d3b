@@ -1,4 +1,4 @@
-'''config file for the auth server'''
+'''config file for the schema server'''
 import pathlib
 # Root of this application, useful if it doesn't occupy an entire domain
 APPLICATION_ROOT = '/'

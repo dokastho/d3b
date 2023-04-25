@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "flask",
             "env": {
-                "FLASK_APP": "authserver",
+                "FLASK_APP": "schemaserver",
                 "FLASK_DEBUG": "1"
             },
             "args": [

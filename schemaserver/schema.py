@@ -1,12 +1,12 @@
-import authserver
+import schemaserver
 import flask
 import os
 
 
-@authserver.app.route("/schema/", methods=["POST"])
+@schemaserver.app.route("/schema/", methods=["POST"])
 def upload_schema():
-    with authserver.app.app_context():
-        connection = authserver.model.get_db()
+    with schemaserver.app.app_context():
+        connection = schemaserver.model.get_db()
 
         # logname must exist in flask.session
         logname = ""
@@ -26,8 +26,8 @@ def upload_schema():
                 flask.abort(400)
 
             # save image
-            fileid = authserver.model.get_uuid(fileobj.filename)
-            path = authserver.app.config["UPLOAD_FOLDER"]/fileid
+            fileid = schemaserver.model.get_uuid(fileobj.filename)
+            path = schemaserver.app.config["UPLOAD_FOLDER"]/fileid
             fileobj.save(path)
 
             # insert new posts entry
@@ -44,10 +44,10 @@ def upload_schema():
 
     return flask.redirect(target)
     
-@authserver.app.route("/schema/delete/<id>/", methods=["POST"])
+@schemaserver.app.route("/schema/delete/<id>/", methods=["POST"])
 def delete_schema(id):
-    with authserver.app.app_context():
-        connection = authserver.model.get_db()
+    with schemaserver.app.app_context():
+        connection = schemaserver.model.get_db()
 
         # logname must exist in flask.session
         logname = ""
@@ -71,7 +71,7 @@ def delete_schema(id):
 
         # remove file
         os.remove(os.path.join(
-            authserver.app.config['UPLOAD_FOLDER'],
+            schemaserver.app.config['UPLOAD_FOLDER'],
             post['fileid'])
         )
 
@@ -86,6 +86,6 @@ def delete_schema(id):
         
         return flask.Response(status=204)
 
-@authserver.app.route("/schema/<name>/")
+@schemaserver.app.route("/schema/<name>/")
 def show_schema(name):
     """render schema page"""

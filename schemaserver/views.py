@@ -1,13 +1,13 @@
-import authserver
+import schemaserver
 import flask
 
 
-@authserver.app.route("/")
+@schemaserver.app.route("/")
 def show_index():
     """render index page"""
-    with authserver.app.app_context():
+    with schemaserver.app.app_context():
         # logname must exist in session
-        logname = authserver.model.check_session()
+        logname = schemaserver.model.check_session()
         if not logname:
             return flask.redirect("/accounts/login/")
 
@@ -19,10 +19,10 @@ def show_index():
     return flask.render_template("index.html", **context)
 
 
-@authserver.app.route("/user/<uname>/")
+@schemaserver.app.route("/user/<uname>/")
 def show_user(uname):
     """Show profile options for uname."""
-    logname = authserver.model.check_session()
+    logname = schemaserver.model.check_session()
     if not logname:
         return flask.redirect("/accounts/login/")
 

@@ -4,17 +4,17 @@ import hashlib
 import os
 import arrow
 from flask import abort, redirect, render_template, request, session
-import authserver
+import schemaserver
 
 
-@authserver.app.route('/accounts/', methods=['POST'])
+@schemaserver.app.route('/accounts/', methods=['POST'])
 def accounts():
     """/accounts/?target=URL Immediate redirect. No screenshot."""
-    with authserver.app.app_context():
-        connection = authserver.model.get_db()
+    with schemaserver.app.app_context():
+        connection = schemaserver.model.get_db()
 
         # check if target is unspecified or blank
-        target = authserver.model.get_target()
+        target = schemaserver.model.get_target()
 
         # get operation
         operation = request.form.get('operation')
@@ -70,7 +70,7 @@ def accounts():
 
 def do_login(uname, pword):
     """Login user with username and password."""
-    logname = authserver.model.check_authorization(uname, pword)
+    logname = schemaserver.model.check_authorization(uname, pword)
     if not logname:
         abort(403)
 
@@ -152,7 +152,7 @@ def do_update_password(connection, info):
     salt = old_pw_hash['password'].split("$")
     if len(salt) > 1:
         salt = salt[1]
-        pw_str = authserver.model.encrypt(salt, info['old'])
+        pw_str = schemaserver.model.encrypt(salt, info['old'])
     else:
         pw_str = info['old']
 
@@ -180,10 +180,10 @@ def do_update_password(connection, info):
     user = cur.fetchall()
 
 
-@authserver.app.route('/accounts/login/')
+@schemaserver.app.route('/accounts/login/')
 def login():
     """Render login page."""
-    with authserver.app.app_context():
+    with schemaserver.app.app_context():
 
         # redirect if a session cookie exists
         if 'logname' not in session:
@@ -194,21 +194,21 @@ def login():
         return redirect('/')
 
 
-@authserver.app.route('/accounts/logout/', methods=['POST'])
+@schemaserver.app.route('/accounts/logout/', methods=['POST'])
 def logout():
     """Log out user and redirects to login."""
     session.clear()
     return redirect('/')
 
 
-@authserver.app.route('/accounts/create/', methods=['GET'])
+@schemaserver.app.route('/accounts/create/', methods=['GET'])
 def create():
     """Render create page if not logged in."""
 
     return render_template('create.html')
 
 
-@authserver.app.route('/accounts/delete/')
+@schemaserver.app.route('/accounts/delete/')
 def delete():
     """Render delete page if logged in."""
     if 'logname' not in session:
@@ -220,7 +220,7 @@ def delete():
     return render_template('delete.html', **context)
 
 
-@authserver.app.route('/accounts/password/')
+@schemaserver.app.route('/accounts/password/')
 def password():
     """Render page to update password if logged in."""
     if 'logname' not in session:

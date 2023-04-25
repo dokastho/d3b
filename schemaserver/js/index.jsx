@@ -48,7 +48,7 @@ class Index extends React.Component {
     const { logname, schemas } = this.state;
     return (
       <div>
-        <h1>Dokasfam Auth Services</h1>
+        <h1>Dokasfam schema Services</h1>
         <a href={`/user/${logname}/`}>signed in as {logname}</a>
         <hr />
         <br />

@@ -1,9 +1,9 @@
-import authserver
+import schemaserver
 import flask
 import os
 
 
-@authserver.app.route('/api/v1/whoami/', methods=["POST"])
+@schemaserver.app.route('/api/v1/whoami/', methods=["POST"])
 def get_account_info():
     """Return a json with logname"""
 
@@ -15,7 +15,7 @@ def get_account_info():
         logname = flask.session["logname"]
         data["logname"] = logname
     
-    database = authserver.model.get_db()
+    database = schemaserver.model.get_db()
     cur = database.execute(
         "SELECT * "
         "FROM schemas "

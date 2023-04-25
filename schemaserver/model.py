@@ -4,7 +4,7 @@ import sqlite3
 import uuid
 import pathlib
 import flask
-import authserver
+import schemaserver
 
 
 def dict_factory(cursor, row):
@@ -23,7 +23,7 @@ def get_db():
     https://flask.palletsprojects.com/en/1.0.x/appcontext/#storing-data
     """
     if 'sqlite_db' not in flask.g:
-        db_filename = authserver.app.config['DATABASE_FILENAME']
+        db_filename = schemaserver.app.config['DATABASE_FILENAME']
         flask.g.sqlite_db = sqlite3.connect(str(db_filename))
         flask.g.sqlite_db.row_factory = dict_factory
         # Foreign keys have to be enabled per-connection.  This is an sqlite3
@@ -32,7 +32,7 @@ def get_db():
     return flask.g.sqlite_db
 
 
-@authserver.app.teardown_appcontext
+@schemaserver.app.teardown_appcontext
 def close_db(error):
     """Close the database at the end of a request.
 
@@ -64,7 +64,7 @@ def get_target():
 
 
 def get_logname():
-    """Get the logname either from session or http basic auth."""
+    """Get the logname either from session or http basic schema."""
     session_logname = check_session()
     basic_logname = check_authorization()
     if session_logname:
@@ -85,11 +85,11 @@ def check_session():
 def check_authorization(username=None, password=None):
     """Check if authorization in request matches credentials for a user."""
     if username is None or password is None:
-        # auth must exist if username and password aren't provided
+        # schema must exist if username and password aren't provided
         if flask.request.headers.get("authorization") is None:
             return False
 
-        # auth must have username and password in headers
+        # schema must have username and password in headers
         username = flask.request.authorization.get("username")
         password = flask.request.authorization.get("password")
         if username is None or password is None:
