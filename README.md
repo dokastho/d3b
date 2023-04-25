@@ -1,4 +1,4 @@
-# schema_server
+# Dokasfam Distributed Database
 Schema server for my distributed DB servers
 
 ## Purpose
