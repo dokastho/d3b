@@ -5,6 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
+*.o
 
 # Distribution / packaging
 .Python
@@ -130,3 +131,8 @@ dmypy.json
 *.bundle.js
 **/node_modules/*
 **/package-lock.json
+
+# Misc
+paxos_server
+*.h
+*.out

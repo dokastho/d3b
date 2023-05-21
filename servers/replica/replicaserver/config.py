@@ -13,3 +13,7 @@ ALLOWED_EXTENSIONS = set(['sqlite3'])
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 # Database file is var/db.sqlite3
 DATABASE_FILENAME = SITE_ROOT/'var'/'db.sqlite3'
+# RPC server
+PAXOS_HOSTS = ["localhost", "localhost", "localhost"]
+PAXOS_PORTS = [8124, 8125, 8126]
+PAXOS_ENDPOINT = "paxos_rpc"
