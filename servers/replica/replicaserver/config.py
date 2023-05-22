@@ -16,4 +16,4 @@ DATABASE_FILENAME = SITE_ROOT/'var'/'db.sqlite3'
 # RPC server
 PAXOS_HOSTS = ["localhost", "localhost", "localhost"]
 PAXOS_PORTS = [8124, 8125, 8126]
-PAXOS_ENDPOINT = "paxos_rpc"
+PAXOS_ENDPOINT = "Paxos"

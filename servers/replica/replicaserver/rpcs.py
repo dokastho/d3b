@@ -23,7 +23,7 @@ class d3b_op:
         pass
 
     def __bytes__(self) -> bytes:
-        bb = self.seed.to_bytes(4, "big")
+        bb = self.seed.to_bytes(4, "little")
         bb += self.query.encode("ascii")
         bb += b"\x00" * (QUERY_LEN - len(self.query))
         if len(self.args) != NARGS:

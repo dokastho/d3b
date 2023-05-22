@@ -13,8 +13,6 @@ app.config.from_object('replicaserver.config')
 # $ export SITE_SETTINGS=secret_key_config.py
 app.config.from_envvar('SITE_SETTINGS', silent=True)
 
-# paxos min seq number
-seq_num = 0
 # shared lock
 seq_lock = Lock()
 

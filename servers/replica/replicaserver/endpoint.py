@@ -27,7 +27,8 @@ def parse_request():
     dh.port = replicaserver.app.config["PAXOS_PORTS"][host_idx]
 
     # request
-    d3b_req = replicaserver.d3b_op("SELECT * FROM USERS WHERE user = ?", "dokastho")  # replace with json values
+    d3b_req = replicaserver.d3b_op(
+        "SELECT * FROM USERS WHERE user = ?", "dokastho")  # replace with json values
 
     # reply
     d3b_rep = replicaserver.d3b_op()
@@ -41,4 +42,9 @@ def parse_request():
     m.target = replicaserver.app.config["PAXOS_ENDPOINT"]
     replicaserver.await_reply(dh, m)
 
-    return flask.Response(status=204)
+    return flask.jsonify({
+        "status": "ok",
+        "query": m.rep.args.query,
+        "args": m.rep.args.args,
+        "seed": m.rep.args.seed
+        })

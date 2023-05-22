@@ -7,9 +7,6 @@ def apply_op(Op: replicaserver.d3b_op):
 
     # perform database operation
 
-    # update seq number
-    replicaserver.seq_num = Op.seq + 1
-
     replicaserver.seq_lock.release()
     pass
 
@@ -30,17 +27,9 @@ def await_reply(dh: drpc_host, m: drpc_msg):
     while not logged:
         c.Call(dh, m)
         logged = True
-
-        # continue logging if the seq num has not been reached
-        if m.rep.args.Op.seq != m.req.args.seq:
-            apply_op(m.rep.args.Op)
-            logged = False
-            m.req.args.seq = get_seq_num()
-            continue
+        apply_op(m.rep.args)
 
         # continue logging if the value returned isn't the one we requested to log
-        if m.rep.args.Op.seed != m.req.args.seed:
-            apply_op(m.rep.args.Op)
+        if m.rep.args.seed != m.req.args.seed:
             logged = False
-            m.req.args.seq = get_seq_num()
             continue

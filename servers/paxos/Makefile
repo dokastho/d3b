@@ -21,6 +21,12 @@ $(EXE): $(EXE).cpp $(SO_PATH)/$(PAXOS_LIB) $(SO_PATH)/$(RPC_LIB)
 clean:
 	rm -f $(OBJECTS) $(EXECUTABLE) $(TESTS) $(PARTIAL_SUBMITFILE) $(FULL_SUBMITFILE) *.out paxos_server
 
+headers:
+	cp ../../../CPPaxos/drpc.h .
+	cp ../../../CPPaxos/Logger.h .
+	cp ../../../CPPaxos/paxos.h .
+	cp ../../../CPPaxos/rpcs.h .
+
 # rule for creating objects
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -fPIC -g -c $*.cpp
