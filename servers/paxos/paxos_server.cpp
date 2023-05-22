@@ -44,7 +44,7 @@ int main()
     std::string cmd = "";
     do
     {
-        std::cout << "type 'q' to quit\n$ ";
+        std::cout << "enter 'q' to quit\n$ ";
         std::cin >> cmd;
     } while (cmd[0] != 'q');
 }

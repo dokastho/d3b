@@ -28,7 +28,7 @@ def parse_request():
 
     # request
     d3b_req = replicaserver.d3b_op(
-        "SELECT * FROM USERS WHERE user = ?", "dokastho")  # replace with json values
+        "SELECT * FROM USERS WHERE username = ?", "dokastho")  # replace with json values
 
     # reply
     d3b_rep = replicaserver.d3b_op()
@@ -40,11 +40,6 @@ def parse_request():
     m.req = req
     m.rep = rep
     m.target = replicaserver.app.config["PAXOS_ENDPOINT"]
-    replicaserver.await_reply(dh, m)
+    data = replicaserver.await_reply(dh, m)
 
-    return flask.jsonify({
-        "status": "ok",
-        "query": m.rep.args.query,
-        "args": m.rep.args.args,
-        "seed": m.rep.args.seed
-        })
+    return flask.jsonify(data)
