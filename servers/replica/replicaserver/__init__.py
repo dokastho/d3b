@@ -16,7 +16,6 @@ app.config.from_envvar('SITE_SETTINGS', silent=True)
 # shared lock
 seq_lock = Lock()
 
-from replicaserver.api import *
 from replicaserver.rpcs import *
 from replicaserver.model import *
 from replicaserver.endpoint import *

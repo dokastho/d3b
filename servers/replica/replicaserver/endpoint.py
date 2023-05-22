@@ -27,8 +27,7 @@ def parse_request():
     dh.port = replicaserver.app.config["PAXOS_PORTS"][host_idx]
 
     # request
-    d3b_req = replicaserver.d3b_op(
-        "SELECT * FROM USERS WHERE username = ?", "dokastho")  # replace with json values
+    d3b_req = replicaserver.d3b_op("db", "SELECT * FROM USERS WHERE username = ?", "dokastho")  # replace with json values
 
     # reply
     d3b_rep = replicaserver.d3b_op()

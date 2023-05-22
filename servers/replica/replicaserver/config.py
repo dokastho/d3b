@@ -12,7 +12,7 @@ UPLOAD_FOLDER = SITE_ROOT/'var'/'uploads'
 ALLOWED_EXTENSIONS = set(['sqlite3'])
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 # Database file is var/db.sqlite3
-DATABASE_FILENAME = SITE_ROOT/'var'/'db.sqlite3'
+DATABASE_PATH = SITE_ROOT/'var'
 # RPC server
 PAXOS_HOSTS = ["localhost", "localhost", "localhost"]
 PAXOS_PORTS = [8124, 8125, 8126]

@@ -13,14 +13,15 @@ def dict_factory(cursor, row):
     return {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
 
 
-def get_db():
+def get_db(table: str):
     """Open a new database connection.
 
     Flask docs:
     https://flask.palletsprojects.com/en/1.0.x/appcontext/#storing-data
     """
     if 'sqlite_db' not in flask.g:
-        db_filename = replicaserver.app.config['DATABASE_FILENAME']
+        db_path = replicaserver.app.config['DATABASE_PATH']
+        db_filename = db_path / f'{table}.sqlite3'
         flask.g.sqlite_db = sqlite3.connect(str(db_filename))
         flask.g.sqlite_db.row_factory = dict_factory
         # Foreign keys have to be enabled per-connection.  This is an sqlite3
@@ -44,21 +45,16 @@ def close_db(error):
 
 
 def apply_op(Op: replicaserver.d3b_op):
+    """Apply a database operation returned from the paxos process."""
     replicaserver.seq_lock.acquire()
-
-    query = Op.query.replace('\x00', '')
-    args = []
-
-    for arg in Op.args:
-        arg = arg.replace('\x00', '')
-        if arg != '':
-            args.append(arg)
-            pass
-        pass
+    
+    # if the Op is a media upload, get from other servers
+    # multicast get request
+    # TODO
 
     # perform database operation
-    connection = get_db()
-    cur = connection.execute(query, args)
+    connection = get_db(Op.table)
+    cur = connection.execute(Op.query, Op.args)
     data = cur.fetchall()
 
     replicaserver.seq_lock.release()
