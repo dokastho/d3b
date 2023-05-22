@@ -1,6 +1,7 @@
 import replicaserver
 import sqlite3
 import flask
+from random import randint
 from pydrpc.drpc_client import *
 
 
@@ -70,8 +71,30 @@ def get_seq_num() -> int:
     return seq
 
 
-def await_reply(dh: drpc_host, m: drpc_msg):
+def add_op(Op: replicaserver.d3b_op):
     """perform db updates until after request is returned"""
+
+    # want random host
+    dh = drpc_host()
+    hosts = replicaserver.app.config["PAXOS_HOSTS"]
+    host_idx = randint(0, len(hosts) - 1)
+    dh.hostname = hosts[host_idx]
+    dh.port = replicaserver.app.config["PAXOS_PORTS"][host_idx]
+
+    # request
+    d3b_req = Op
+
+    # reply
+    d3b_rep = replicaserver.d3b_op()
+
+    # RPC
+    req = drpc_arg_wrapper(d3b_req)
+    rep = drpc_arg_wrapper(d3b_rep)
+    m = drpc_msg()
+    m.req = req
+    m.rep = rep
+    m.target = replicaserver.app.config["PAXOS_ENDPOINT"]
+
     c = drpc_client()
     logged = False
     data = dict()
