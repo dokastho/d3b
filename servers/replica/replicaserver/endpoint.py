@@ -7,16 +7,21 @@ from random import randint
 from pydrpc.drpc_client import *
 
 
-@replicaserver.app.route("/")
+@replicaserver.app.route("/", methods=["POST"])
 def parse_request():
     # get data from body
     content_type = flask.request.headers.get('Content-Type')
-    # body: json
-    # if (content_type == 'application/json'):
-    #     body = flask.request.json
-    # else:
-    #     flask.abort(400)
-    #     pass
+    body: json
+    if (content_type == 'application/json'):
+        body = flask.request.json
+    else:
+        flask.abort(400)
+        pass
+
+    # verify validity of request body
+    if ["table", "query", "args"] not in body:
+        flask.abort(400)
+        pass
 
     # record this request in the paxos log
     # want random host
@@ -27,7 +32,10 @@ def parse_request():
     dh.port = replicaserver.app.config["PAXOS_PORTS"][host_idx]
 
     # request
-    d3b_req = replicaserver.d3b_op("db", "SELECT * FROM USERS WHERE username = ?", "dokastho")  # replace with json values
+    table = body["table"]
+    query = body["query"]
+    args = body["args"]
+    d3b_req = replicaserver.d3b_op(table, query, args)
 
     # reply
     d3b_rep = replicaserver.d3b_op()
