@@ -62,15 +62,6 @@ def apply_op(Op: replicaserver.d3b_op):
     return data
 
 
-def get_seq_num() -> int:
-    replicaserver.seq_lock.acquire()
-
-    seq = replicaserver.seq_num
-
-    replicaserver.seq_lock.release()
-    return seq
-
-
 def add_op(Op: replicaserver.d3b_op):
     """perform db updates until after request is returned"""
 

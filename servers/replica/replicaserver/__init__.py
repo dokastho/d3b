@@ -17,5 +17,6 @@ app.config.from_envvar('SITE_SETTINGS', silent=True)
 seq_lock = Lock()
 
 from replicaserver.rpcs import *
+from replicaserver.common import *
 from replicaserver.model import *
 from replicaserver.endpoint import *
