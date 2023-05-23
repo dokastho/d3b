@@ -12,8 +12,11 @@ class d3b_client:
         self.host = host
         pass
 
-    def get(self,):
-        pass
+    def get(self, data: json, headers):
+        response = requests.post(self.host, json=data, headers=headers)
+        if response.status_code != 200:
+            flask.abort(500)
+        return response.json()
     
     def post(self, data: json, headers):
         response = requests.post(self.host, json=data, headers=headers)

@@ -6,8 +6,6 @@ import os
 @schemaserver.app.route("/schema/", methods=["POST"])
 def upload_schema():
     with schemaserver.app.app_context():
-        connection = schemaserver.model.get_db()
-
         # logname must exist in flask.session
         logname = ""
         if 'logname' not in flask.session:
@@ -57,15 +55,19 @@ def delete_schema(id):
         if 'logname' not in flask.session:
             return flask.redirect("/accounts/login/")
         logname = flask.session['logname']
-
+        
         # get post, delete filename, delete post
-        cur = connection.execute(
-            "SELECT * "
-            "FROM schemas "
-            "WHERE id == ?",
-            (id,)
-        )
-        post = cur.fetchall()
+        req_data = {
+            "table": "schemas",
+            "query": "SELECT * FROM schemas WHERE id = ?",
+            "args": [id]
+        }
+        req_hdrs = {
+            'content_type': 'application/json'
+        }
+            
+        post = schemaserver.db.get(req_data, req_hdrs)
+
         if len(post) == []:
             flask.abort(404)
         elif post[0]['owner'] != logname:
@@ -73,19 +75,22 @@ def delete_schema(id):
         post = post[0]
 
         # remove file
-        os.remove(os.path.join(
-            schemaserver.app.config['UPLOAD_FOLDER'],
-            post['fileid'])
-        )
+        # os.remove(os.path.join(
+        #     schemaserver.app.config['UPLOAD_FOLDER'],
+        #     post['fileid'])
+        # )
 
         # delete entry
-        cur = connection.execute(
-            "DELETE "
-            "FROM schemas "
-            "WHERE id == ?",
-            (id,)
-        )
-        cur.fetchall()
+        req_data = {
+            "table": "schemas",
+            "query": "DELETE FROM schemas WHERE id = ?",
+            "args": [id]
+        }
+        req_hdrs = {
+            'content_type': 'application/json'
+        }
+            
+        schemaserver.db.post(req_data, req_hdrs)
         
         return flask.Response(status=204)
 

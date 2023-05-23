@@ -78,6 +78,7 @@ class d3b_op:
         start = stop
         stop += QUERY_LEN
         self.query = data[start:stop].decode("ascii")
+        self.args = []
         for n in arg_lengths:
             start = stop
             stop += n

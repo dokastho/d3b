@@ -15,16 +15,18 @@ def get_account_info():
         logname = flask.session["logname"]
         data["logname"] = logname
     
-    database = schemaserver.model.get_db()
-    cur = database.execute(
-        "SELECT * "
-        "FROM schemas "
-        "WHERE owner == ?",
-        (logname,)
-    )
-    schemas = cur.fetchall()
+    req_data = {
+        "table": "schemas",
+        "query": "SELECT * FROM schemas WHERE owner = ?",
+        "args": [logname]
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+        
+    post = schemaserver.db.get(req_data, req_hdrs)
 
-    data["schemas"] = schemas
+    data["schemas"] = post
 
     return flask.jsonify(data), 201
 
