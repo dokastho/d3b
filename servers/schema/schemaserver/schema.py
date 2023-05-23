@@ -22,22 +22,25 @@ def upload_schema():
         if operation == "create":
             fileobj = flask.request.files.get('file')
             filename = flask.request.form.get('dbname')
-            if fileobj is None or not fileobj.filename.endswith('.sql'):
+            if fileobj is None or not fileobj.filename.endswith('.sqlite3'):
                 flask.abort(400)
 
             # save image
             fileid = schemaserver.model.get_uuid(fileobj.filename)
             path = schemaserver.app.config["UPLOAD_FOLDER"]/fileid
             fileobj.save(path)
-
-            # insert new posts entry
-            cur = connection.execute(
-                "INSERT INTO schemas "
-                "(owner, name, fileid) "
-                "VALUES (?, ?, ?)",
-                (logname, filename, fileid,)
-            )
-            cur.fetchone()
+            
+            # make post request
+            req_data = {
+                "table": "schemas",
+                "query": "INSERT INTO schemas (owner, name, fileid) VALUES (?, ?, ?)",
+                "args": [logname, filename, fileid]
+            }
+            req_hdrs = {
+                'content_type': 'application/json'
+            }
+            
+            schemaserver.db.post(req_data, req_hdrs)
 
         else:
             flask.abort(400)
