@@ -26,15 +26,12 @@ def parse_request():
     data = replicaserver.add_op(op)
 
     # if there's media, deal with it
-    if "filename" in body:
-        if "fileop" not in body:
+    if "file_id" in body:
+        if "file_op" not in body:
             flask.abort(400)
             pass
-        file_op = body['fileop']
-        file_name = body['file_name']
-
-        # get uuid of the file
-        file_id = replicaserver.get_uuid()
+        file_op = body['file_op']
+        file_id = body['file_id']
 
         if file_op == "get":
             pass

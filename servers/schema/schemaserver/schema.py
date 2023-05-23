@@ -23,15 +23,13 @@ def upload_schema():
             if fileobj is None or not fileobj.filename.endswith('.sqlite3'):
                 flask.abort(400)
 
-            # save image
+            # create id for media
             fileid = schemaserver.model.get_uuid(fileobj.filename)
-            path = schemaserver.app.config["UPLOAD_FOLDER"]/fileid
-            fileobj.save(path)
             
             # make post request
             req_data = {
                 "table": "schemas",
-                "query": "INSERT INTO schemas (owner, name, fileid) VALUES (?, ?, ?)",
+                "query": "INSERT INTO tables (owner, name, fileid) VALUES (?, ?, ?)",
                 "args": [logname, filename, fileid]
             }
             req_hdrs = {
@@ -59,7 +57,7 @@ def delete_schema(id):
         # get post, delete filename, delete post
         req_data = {
             "table": "schemas",
-            "query": "SELECT * FROM schemas WHERE id = ?",
+            "query": "SELECT * FROM tables WHERE id = ?",
             "args": [id]
         }
         req_hdrs = {
@@ -83,7 +81,7 @@ def delete_schema(id):
         # delete entry
         req_data = {
             "table": "schemas",
-            "query": "DELETE FROM schemas WHERE id = ?",
+            "query": "DELETE FROM tables WHERE id = ?",
             "args": [id]
         }
         req_hdrs = {

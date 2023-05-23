@@ -17,7 +17,7 @@ def get_account_info():
     
     req_data = {
         "table": "schemas",
-        "query": "SELECT * FROM schemas WHERE owner = ?",
+        "query": "SELECT * FROM tables WHERE owner = ?",
         "args": [logname]
     }
     req_hdrs = {

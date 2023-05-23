@@ -36,9 +36,10 @@ class Index extends React.Component {
       .then(() => {
         const { schemas } = this.state;
         this.setState({
-          schemas: schemas.filter(function(s) { 
-            return s.id !== id 
-        })});
+          schemas: schemas.filter(function (s) {
+            return s.id !== id
+          })
+        });
       })
       .catch((error) => console.log(error));
   }
@@ -64,6 +65,8 @@ class Index extends React.Component {
             <input type="hidden" name="operation" value="create" />
             <label htmlFor="file">DB Schema .sqlite3 file</label><br />
             <input type="file" id="file" name="file" required /><br />
+            <label htmlFor="dbname">DB Name</label><br />
+            <input type="text" id="dbname" name="dbname" required /><br />
             <input type="submit" />
           </form>
           <br />
@@ -75,9 +78,10 @@ class Index extends React.Component {
           schemas.map((s) => (
             <div className="row" key={s.id}>
               <span>
-                {s.name}&#9;{s.created}&#9;
+                {s.name}&#9;({s.fileid})&#9;created {s.created}
               </span>
-              <button className="deletebtn" onClick={() => this.deleteSchema(s.id)}>x</button>
+              {s.fileid === "schemas.sqlite3" ? null : <button className="deletebtn" onClick={() => this.deleteSchema(s.id)}>x</button>}
+              
             </div>
           ))
         }

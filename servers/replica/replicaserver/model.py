@@ -14,21 +14,49 @@ def dict_factory(cursor, row):
     return {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
 
 
-def get_db(table: str):
+def get_db(table_id: str):
     """Open a new database connection.
 
     Flask docs:
     https://flask.palletsprojects.com/en/1.0.x/appcontext/#storing-data
     """
     if 'sqlite_db' not in flask.g:
-        db_path = replicaserver.app.config['DATABASE_PATH']
-        db_filename = db_path / f'{table}.sqlite3'
+        db_path = replicaserver.app.config['UPLOAD_FOLDER']
+        db_filename = db_path / table_id
         flask.g.sqlite_db = sqlite3.connect(str(db_filename))
         flask.g.sqlite_db.row_factory = dict_factory
         # Foreign keys have to be enabled per-connection.  This is an sqlite3
         # backwards compatibility thing.
         flask.g.sqlite_db.execute("PRAGMA foreign_keys = ON")
     return flask.g.sqlite_db
+
+
+def get_table_uuid(table):
+    """Get table uuid."""
+    
+    # set up connection with translational table
+    db_path = replicaserver.app.config['UPLOAD_FOLDER']
+    db_filename = db_path / "schemas.sqlite3"
+    connection = sqlite3.connect(str(db_filename))
+    connection.row_factory = dict_factory
+    # Foreign keys have to be enabled per-connection.  This is an sqlite3
+    # backwards compatibility thing.
+    connection.execute("PRAGMA foreign_keys = ON")
+
+    # fetch uuid
+    cur = connection.execute(
+        "SELECT fileid FROM tables WHERE name = ?",
+        (table,)
+    )
+    uuid = cur.fetchone()
+    if len(uuid) == 0:
+        flask.abort(404)
+    
+    # close
+    connection.commit()
+    connection.close()
+    
+    return uuid['fileid']
 
 
 @replicaserver.app.teardown_appcontext
@@ -54,7 +82,8 @@ def apply_op(Op: replicaserver.d3b_op):
     # TODO
 
     # perform database operation
-    connection = get_db(Op.table)
+    table_uuid = get_table_uuid(Op.table)
+    connection = get_db(table_uuid)
     cur = connection.execute(Op.query, Op.args)
     data = cur.fetchall()
 
