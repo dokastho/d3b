@@ -1,7 +1,7 @@
 from random import randint
 
 QUERY_LEN = 128
-ARG_LEN = 96
+ARGS_LEN = 96
 MISC_LEN = 32
 MISC_ITEM_LEN = 8
 
@@ -25,28 +25,33 @@ class d3b_op:
         for arg in args:
             s += len(arg)
             pass
-        if s > ARG_LEN:
+        if s > ARGS_LEN:
             raise Exception("Too many args in query")
         pass
 
     def __bytes__(self) -> bytes:
         bb = self.seed.to_bytes(4, "little")
         # encode metadata (table + arg lengths)
-        misc_len = 0
+        misc_padding = MISC_LEN
         bb += self.table.encode("ascii")
-        misc_len += len(self.table)
+        misc_padding -= MISC_ITEM_LEN
         bb += b"\x00" * (MISC_ITEM_LEN - len(self.table))
         for arg in self.args:
             bb += len(arg).to_bytes(1, "little")
-            misc_len += 1
+            misc_padding -= 1
             pass
-        bb += b"\x00" * (ARG_LEN - len(misc_len))
+        bb += b"\x00" * misc_padding
 
         # data payload
         bb += self.query.encode("ascii")
         bb += b"\x00" * (QUERY_LEN - len(self.query))
+        
+        arg_padding = ARGS_LEN
         for arg in self.args:
             bb += arg.encode("ascii")
+            arg_padding -= len(arg)
+            pass
+        bb += b"\x00" * arg_padding
 
         return bb
 
@@ -54,8 +59,10 @@ class d3b_op:
         start = 0
         stop = 4
         self.seed = int.from_bytes(data[start:stop], "little")
+        misc_padding = MISC_LEN
         start = stop
         stop += MISC_ITEM_LEN
+        misc_padding -= MISC_ITEM_LEN
         self.table = data[start:stop].decode("ascii")
 
         # args
@@ -63,8 +70,10 @@ class d3b_op:
         for i in range(MISC_ITEM_LEN):
             start = stop
             stop += 1
+            misc_padding -= 1
             arg_lengths.append(data[start])
             pass
+        stop += misc_padding
 
         start = stop
         stop += QUERY_LEN
@@ -72,7 +81,8 @@ class d3b_op:
         for n in arg_lengths:
             start = stop
             stop += n
-            self.args[i] = data[start:stop].decode("ascii")
+            if n > 0:
+                self.args.append(data[start:stop].decode("ascii"))
             pass
 
         # remove null bytes

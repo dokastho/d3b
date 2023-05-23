@@ -16,24 +16,24 @@ case $1 in
   "create")
   ## TODO avoid clobbering an existing database?
     mkdir -p var/uploads
-    sqlite3 var/db.sqlite3 < sql/schema.sql
-    sqlite3 var/db.sqlite3 < sql/data.sql
+    sqlite3 var/schemas.sqlite3 < sql/schema.sql
+    sqlite3 var/schemas.sqlite3 < sql/data.sql
     ;;
 
   "destroy")
-    rm -rf var/db.sqlite3 var/uploads
+    rm -rf var/schemas.sqlite3 var/uploads
     ;;
   "reset")
-    rm -rf var/db.sqlite3 var/uploads
+    rm -rf var/schemas.sqlite3 var/uploads
     mkdir -p var/uploads
-    sqlite3 var/db.sqlite3 < sql/schema.sql
-    sqlite3 var/db.sqlite3 < sql/data.sql
+    sqlite3 var/schemas.sqlite3 < sql/schema.sql
+    sqlite3 var/schemas.sqlite3 < sql/data.sql
     ;;
-  "users") sqlite3 -batch -line var/db.sqlite3 'select * from users';;
+  "users") sqlite3 -batch -line var/schemas.sqlite3 'select * from users';;
   "dump")
-    sqlite3 -batch -line var/db.sqlite3 'select * from users'
+    sqlite3 -batch -line var/schemas.sqlite3 'select * from users'
 
-    sqlite3 -batch -line var/db.sqlite3 'select * from schemas'
+    sqlite3 -batch -line var/schemas.sqlite3 'select * from schemas'
     ;;
   *)
     usage

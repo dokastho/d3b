@@ -37,7 +37,7 @@
                 "--no-debugger",
                 // "--no-reload",
                 "--port",
-                "8000"
+                "8020"
             ],
             "jinja": true,
             "justMyCode": true
