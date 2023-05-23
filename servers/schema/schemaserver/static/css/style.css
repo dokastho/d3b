@@ -9,3 +9,10 @@ body {
 .deletebtn {
     margin-left: 10px;
 }
+
+.panel {
+    border: 1px solid black;
+    border-radius: 5px;
+    width: min-content;
+    padding: 10px;
+}
