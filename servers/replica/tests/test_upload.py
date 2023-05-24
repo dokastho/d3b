@@ -21,25 +21,30 @@ def get_uuid(filename):
 
 def test_upload():
     """Upload a file and ensure that it returns OK."""
-    pass
-    # filename = "test_blob.bin"
-    # fpath = root / filename
-    # fileobj = open(fpath, 'rb')
+    filename = "test_blob.bin"
+    fpath = root / filename
+    fileobj = open(fpath, 'rb')
 
-    # # create id for media
-    # fileid = get_uuid(filename)
+    # create id for media
+    fileid = f'test-{get_uuid(filename)}'
     
-    # # make post request
-    # req_data = {
-    #     "table": "schemas",
-    #     "query": "INSERT INTO tables (owner, name, fileid) VALUES (?, ?, ?)",
-    #     "args": [logname, filename, fileid],
-    #     "media_op": "upload",
-    #     "file_id": fileid
-    # }
+    # make post request
+    req_data = {
+        "table": "schemas",
+        "query": "INSERT INTO tables (owner, name, fileid) VALUES (?, ?, ?)",
+        "args": [logname, filename, fileid],
+        "media_op": "upload",
+        "file_id": fileid
+    }
     
-    # c.file_post(req_data, fileobj)
-    # pass
+    c.file_post(req_data, fileobj)
+    
+    # cleanup
+    try:
+        os.remove(root.parent / 'var' / fileid)
+    except:
+        pass
+    pass
 
 
 def test_get():

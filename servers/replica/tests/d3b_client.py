@@ -3,6 +3,7 @@
 import json
 import flask
 import replicaserver
+import io
 
 class d3b_client:
 
@@ -20,8 +21,8 @@ class d3b_client:
     
     def file_post(self, data, fileobj):
         payload = {
-            'json': (None, json.dumps(data), 'application/json'),
-            'file': (fileobj, fileobj.name.split('/')[-1])
+            'json': (io.BytesIO(json.dumps(data).encode("ascii")), None, 'application/json'),
+            'file': (fileobj, 'test.jpg')
         }
         response = replicaserver.app.test_client().post(data=payload)
         if response.status_code != 200:
