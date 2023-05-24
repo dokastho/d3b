@@ -1,7 +1,7 @@
 from random import randint
 import json
 
-PAXOS_BUFFER_LEN = 256
+PAXOS_BUFFER_LEN = 512
 
 class d3b_op:
     seed: int
