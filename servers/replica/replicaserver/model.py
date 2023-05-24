@@ -76,16 +76,34 @@ def close_db(error):
 def apply_op(Op: replicaserver.d3b_op):
     """Apply a database operation returned from the paxos process."""
     replicaserver.seq_lock.acquire()
-    
-    # if the Op is a media upload, get from other servers
-    # multicast get request
-    # TODO
 
     # perform database operation
-    table_uuid = get_table_uuid(Op.table)
+    body = Op.data
+    table_uuid = get_table_uuid(body["table"])
     connection = get_db(table_uuid)
-    cur = connection.execute(Op.query, Op.args)
+    cur = connection.execute(body["query"], body["args"])
     data = cur.fetchall()
+    
+    # if there's a media upload, get blob & save it
+    # if replicaserver.MEDIA_MASK & Op.flags != 0:
+    #     # upload
+    #     if replicaserver.MEDIA_UPLOAD & Op.flags != 0:
+    #         blob = flask.request.files.get('file')
+
+    #         # save file
+    #         path = replicaserver.app.config["UPLOAD_FOLDER"]/file_id
+    #         blob.save(path)
+    #         pass
+    #     # delete
+    #     elif replicaserver.MEDIA_DELETE & Op.flags != 0:
+    #         # delete file
+    #         os.remove(os.path.join(
+    #             replicaserver.app.config['UPLOAD_FOLDER'],
+    #             file_id)
+    #         )
+    #         pass
+
+    #     pass
 
     replicaserver.seq_lock.release()
     return data
@@ -122,33 +140,6 @@ def add_op(Op: replicaserver.d3b_op):
         c.Call(dh, m)
         logged = True
         data = apply_op(m.rep.args)
-        
-        # if there's media, deal with it
-        # if "file_id" in body:
-        #     if "file_op" not in body:
-        #         flask.abort(400)
-        #         pass
-        #     file_op = body['file_op']
-        #     file_id = body['file_id']
-
-        #     if file_op == "get":
-        #         pass
-        #     elif file_op == "upload":
-        #         blob = flask.request.files.get('file')
-
-        #         # save file
-        #         path = replicaserver.app.config["UPLOAD_FOLDER"]/file_id
-        #         blob.save(path)
-        #         pass
-        #     elif file_op == "delete":
-        #         # delete file
-        #         os.remove(os.path.join(
-        #             replicaserver.app.config['UPLOAD_FOLDER'],
-        #             file_id)
-        #         )
-        #         pass
-
-        #     pass
 
         # continue logging if the value returned isn't the one we requested to log
         if m.rep.args.seed != m.req.args.seed:

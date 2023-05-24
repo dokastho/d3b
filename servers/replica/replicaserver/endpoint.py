@@ -2,7 +2,6 @@
 
 import flask
 import replicaserver
-import os
 
 
 @replicaserver.app.route("/", methods=["POST"])
@@ -17,16 +16,14 @@ def parse_request():
             pass
         pass
 
-    table = body["table"]
-    query = body["query"]
-    args = body["args"]
-    flags = []
-    if "flags" in body:
-        flags = body["flags"]
-        pass
-    op = replicaserver.d3b_op(table, query, args, flags)
+    op = replicaserver.d3b_op(body)
 
     # record this request in the paxos log
     data = replicaserver.add_op(op)
+    
+    # media op get should only be applied if it was the latest request
+    # if replicaserver.MEDIA_REQUEST & op.flags != 0:
+    #     # use the 'data' returned from db
+    #     pass
 
     return flask.jsonify(data)
