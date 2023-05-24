@@ -30,23 +30,28 @@ def upload_schema():
             req_data = {
                 "table": "schemas",
                 "query": "INSERT INTO tables (owner, name, fileid) VALUES (?, ?, ?)",
-                "args": [logname, filename, fileid]
-            }
-            req_hdrs = {
-                'content_type': 'application/json'
+                "args": [logname, filename, fileid],
+                "media_op": "upload",
+                "file_id": fileid
             }
             
-            schemaserver.db.post(req_data, req_hdrs)
+            schemaserver.db.file_post(req_data, fileobj)
 
         else:
             flask.abort(400)
 
     return flask.redirect(target)
     
-@schemaserver.app.route("/schema/delete/<id>/", methods=["POST"])
-def delete_schema(id):
+@schemaserver.app.route("/schema/delete/", methods=["POST"])
+def delete_schema():
     with schemaserver.app.app_context():
-        connection = schemaserver.model.get_db()
+        if 'dbid' not in flask.request.args:
+            flask.abort(400)
+        if 'fileid' not in flask.request.args:
+            flask.abort(400)
+            
+        db_id = flask.request.args['dbid']
+        file_id = flask.request.args['fileid']
 
         # logname must exist in flask.session
         logname = ""
@@ -58,7 +63,7 @@ def delete_schema(id):
         req_data = {
             "table": "schemas",
             "query": "SELECT * FROM tables WHERE id = ?",
-            "args": [id]
+            "args": [db_id]
         }
         req_hdrs = {
             'content_type': 'application/json'
@@ -72,18 +77,13 @@ def delete_schema(id):
             flask.abort(403)
         post = post[0]
 
-        # remove file
-        # os.remove(os.path.join(
-        #     schemaserver.app.config['UPLOAD_FOLDER'],
-        #     post['fileid'])
-        # )
-
         # delete entry
         req_data = {
             "table": "schemas",
             "query": "DELETE FROM tables WHERE id = ?",
-            "args": [id],
-            # "flags": [0b10000000]
+            "args": [db_id],
+            "media_op": "delete",
+            "file_id": file_id
         }
         req_hdrs = {
             'content_type': 'application/json'

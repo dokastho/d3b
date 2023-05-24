@@ -1,6 +1,7 @@
 import replicaserver
 import sqlite3
 import flask
+import os
 from random import randint
 from pydrpc.drpc_client import *
 
@@ -85,25 +86,25 @@ def apply_op(Op: replicaserver.d3b_op):
     data = cur.fetchall()
     
     # if there's a media upload, get blob & save it
-    # if replicaserver.MEDIA_MASK & Op.flags != 0:
-    #     # upload
-    #     if replicaserver.MEDIA_UPLOAD & Op.flags != 0:
-    #         blob = flask.request.files.get('file')
+    if "media_op" in body:
+        file_id = body["file_id"]
+        op = body["media_op"]
+        # upload
+        if op == "upload":
+            blob = flask.request.files.get('file')
 
-    #         # save file
-    #         path = replicaserver.app.config["UPLOAD_FOLDER"]/file_id
-    #         blob.save(path)
-    #         pass
-    #     # delete
-    #     elif replicaserver.MEDIA_DELETE & Op.flags != 0:
-    #         # delete file
-    #         os.remove(os.path.join(
-    #             replicaserver.app.config['UPLOAD_FOLDER'],
-    #             file_id)
-    #         )
-    #         pass
+            # save file
+            blob_path = replicaserver.app.config["UPLOAD_FOLDER"]/file_id
+            blob.save(blob_path)
+            pass
+        # delete
+        elif op == "delete":
+            # delete file
+            blob_path = replicaserver.app.config["UPLOAD_FOLDER"]/file_id
+            os.remove(blob_path)
+            pass
 
-    #     pass
+        pass
 
     replicaserver.seq_lock.release()
     return data

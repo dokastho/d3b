@@ -15,6 +15,15 @@ def parse_request():
             flask.abort(400)
             pass
         pass
+    
+    # if media in request, ensure request has requisite info
+    if "media_op" in body:
+        for arg in ["file_id"]:
+            if arg not in body:
+                flask.abort(400)
+                pass
+            pass
+        pass
 
     op = replicaserver.d3b_op(body)
 
@@ -22,8 +31,8 @@ def parse_request():
     data = replicaserver.add_op(op)
     
     # media op get should only be applied if it was the latest request
-    # if replicaserver.MEDIA_REQUEST & op.flags != 0:
-    #     # use the 'data' returned from db
-    #     pass
+    if "media_op" in body and body["media_op"] == "get":
+        # use the 'data' returned from db
+        pass
 
     return flask.jsonify(data)

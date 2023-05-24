@@ -27,8 +27,8 @@ class Index extends React.Component {
   }
 
 
-  deleteSchema(id) {
-    fetch(`/schema/delete/${id}/`, { credentials: 'same-origin', method: 'POST' })
+  deleteSchema(id, fileid) {
+    fetch(`/schema/delete/?dbid=${id}&fileid=${fileid}/`, { credentials: 'same-origin', method: 'POST' })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         // return response.json();
@@ -80,7 +80,7 @@ class Index extends React.Component {
               <span>
                 {s.name}&#9;({s.fileid})&#9;created {s.created}
               </span>
-              {s.fileid === "schemas.sqlite3" ? null : <button className="deletebtn" onClick={() => this.deleteSchema(s.id)}>x</button>}
+              {s.fileid === "schemas.sqlite3" ? null : <button className="deletebtn" onClick={() => this.deleteSchema(s.id, s.fileid)}>x</button>}
               
             </div>
           ))

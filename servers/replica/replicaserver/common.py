@@ -7,7 +7,7 @@ def get_body() -> json:
     if content_type == 'application/json':
         body = flask.request.json
     else:
-        flask.abort(400)
+        body = json.loads(flask.request.form['json'])
         pass
     return body
 
