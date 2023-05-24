@@ -2,6 +2,8 @@
 
 import flask
 import replicaserver
+import json
+import io
 
 
 @replicaserver.app.route("/", methods=["POST"])
@@ -33,6 +35,8 @@ def parse_request():
     # media op get should only be applied if it was the latest request
     if "media_op" in body and body["media_op"] == "get":
         # use the 'data' returned from db
-        pass
+        file_id = body['file_id']
+        fileobj = open(replicaserver.app.config["UPLOAD_FOLDER"] / file_id, 'rb')
+        return flask.Response(fileobj)
 
     return flask.jsonify(data)
