@@ -16,36 +16,6 @@ def dict_factory(cursor, row):
     return {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
 
 
-def get_db():
-    """Open a new database connection.
-
-    Flask docs:
-    https://flask.palletsprojects.com/en/1.0.x/appcontext/#storing-data
-    """
-    if 'sqlite_db' not in flask.g:
-        db_filename = schemaserver.app.config['DATABASE_FILENAME']
-        flask.g.sqlite_db = sqlite3.connect(str(db_filename))
-        flask.g.sqlite_db.row_factory = dict_factory
-        # Foreign keys have to be enabled per-connection.  This is an sqlite3
-        # backwards compatibility thing.
-        flask.g.sqlite_db.execute("PRAGMA foreign_keys = ON")
-    return flask.g.sqlite_db
-
-
-@schemaserver.app.teardown_appcontext
-def close_db(error):
-    """Close the database at the end of a request.
-
-    Flask docs:
-    https://flask.palletsprojects.com/en/1.0.x/appcontext/#storing-data
-    """
-    assert error or not error  # Needed to avoid superfluous style error
-    sqlite_db = flask.g.pop('sqlite_db', None)
-    if sqlite_db is not None:
-        sqlite_db.commit()
-        sqlite_db.close()
-
-
 def get_uuid(filename):
     """Get image uuid."""
     stem = uuid.uuid4().hex
@@ -96,16 +66,17 @@ def check_authorization(username=None, password=None):
             return False
 
     # verify username and password match an existing user
-    connection = get_db()
-    cur = connection.execute(
-        "SELECT password "
-        "FROM users "
-        "WHERE username == ? ",
-        (username,)
-    )
-
-    # password must exist
-    pw_hash = cur.fetchall()
+    
+    req_data = {
+        "table": "schemas",
+        "query": "SELECT password FROM users WHERE username = ?",
+        "args": [username],
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+        
+    pw_hash = schemaserver.db.get(req_data, req_hdrs)
     if len(pw_hash) == 0:
         return False
 
@@ -119,15 +90,16 @@ def check_authorization(username=None, password=None):
         pw_str = password
 
     # find an entry with encrypted password
-    cur = connection.execute(
-        "SELECT username "
-        "FROM users "
-        "WHERE username == ? AND password == ?",
-        (username, pw_str,)
-    )
-
-    # user must exist
-    user = cur.fetchall()
+    req_data = {
+        "table": "schemas",
+        "query": "SELECT username FROM users WHERE username = ? AND password = ?",
+        "args": [username, pw_str],
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+        
+    user = schemaserver.db.get(req_data, req_hdrs)
     if len(user) == 0:
         return False
 

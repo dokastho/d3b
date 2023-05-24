@@ -16,3 +16,4 @@ MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 PAXOS_HOSTS = ["localhost", "localhost", "localhost"]
 PAXOS_PORTS = [8124, 8125, 8126]
 PAXOS_ENDPOINT = "Paxos"
+MY_HOST_ID = 0

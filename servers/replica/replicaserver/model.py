@@ -122,6 +122,33 @@ def add_op(Op: replicaserver.d3b_op):
         c.Call(dh, m)
         logged = True
         data = apply_op(m.rep.args)
+        
+        # if there's media, deal with it
+        # if "file_id" in body:
+        #     if "file_op" not in body:
+        #         flask.abort(400)
+        #         pass
+        #     file_op = body['file_op']
+        #     file_id = body['file_id']
+
+        #     if file_op == "get":
+        #         pass
+        #     elif file_op == "upload":
+        #         blob = flask.request.files.get('file')
+
+        #         # save file
+        #         path = replicaserver.app.config["UPLOAD_FOLDER"]/file_id
+        #         blob.save(path)
+        #         pass
+        #     elif file_op == "delete":
+        #         # delete file
+        #         os.remove(os.path.join(
+        #             replicaserver.app.config['UPLOAD_FOLDER'],
+        #             file_id)
+        #         )
+        #         pass
+
+        #     pass
 
         # continue logging if the value returned isn't the one we requested to log
         if m.rep.args.seed != m.req.args.seed:

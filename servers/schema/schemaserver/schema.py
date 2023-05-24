@@ -82,7 +82,8 @@ def delete_schema(id):
         req_data = {
             "table": "schemas",
             "query": "DELETE FROM tables WHERE id = ?",
-            "args": [id]
+            "args": [id],
+            "flags": [0b10000000]
         }
         req_hdrs = {
             'content_type': 'application/json'

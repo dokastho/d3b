@@ -20,36 +20,13 @@ def parse_request():
     table = body["table"]
     query = body["query"]
     args = body["args"]
-    op = replicaserver.d3b_op(table, query, args)
+    flags = []
+    if "flags" in body:
+        flags = body["flags"]
+        pass
+    op = replicaserver.d3b_op(table, query, args, flags)
 
     # record this request in the paxos log
     data = replicaserver.add_op(op)
-
-    # if there's media, deal with it
-    if "file_id" in body:
-        if "file_op" not in body:
-            flask.abort(400)
-            pass
-        file_op = body['file_op']
-        file_id = body['file_id']
-
-        if file_op == "get":
-            pass
-        elif file_op == "upload":
-            blob = flask.request.files.get('file')
-
-            # save file
-            path = replicaserver.app.config["UPLOAD_FOLDER"]/file_id
-            blob.save(path)
-            pass
-        elif file_op == "delete":
-            # delete file
-            os.remove(os.path.join(
-                replicaserver.app.config['UPLOAD_FOLDER'],
-                file_id)
-            )
-            pass
-
-        pass
 
     return flask.jsonify(data)
