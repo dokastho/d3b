@@ -24,6 +24,12 @@ class d3b_client:
             flask.abort(500)
         pass
     
+    def file_get(self, data: json, headers):
+        response = requests.post(self.host, json=data, headers=headers)
+        if response.status_code != 200:
+            flask.abort(500)
+        return response.content
+    
     def file_post(self, data, fileobj):
         files = {
             'json': (None, json.dumps(data), 'application/json'),
