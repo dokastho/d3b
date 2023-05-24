@@ -89,10 +89,15 @@ def apply_op(Op: replicaserver.d3b_op):
     if "media_op" in body:
         file_id = body["file_id"]
         op = body["media_op"]
+        
         # upload
         if op == "upload":
+            host_id = body["host_id"]
+            my_id = replicaserver.app.config["MY_HOST_ID"]
             blob = flask.request.files.get('file')
-
+            if host_id != my_id:
+                # get blob from peer
+                c = 
             # save file
             blob_path = replicaserver.app.config["UPLOAD_FOLDER"]/file_id
             blob.save(blob_path)

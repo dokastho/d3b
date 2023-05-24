@@ -20,7 +20,7 @@ def parse_request():
     
     # if media in request, ensure request has requisite info
     if "media_op" in body:
-        for arg in ["file_id"]:
+        for arg in ["file_id", "host_id"]:
             if arg not in body:
                 flask.abort(400)
                 pass
