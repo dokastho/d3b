@@ -19,11 +19,11 @@ class d3b_client:
         pass
     
     def file_post(self, data, fileobj):
-        files = {
+        payload = {
             'json': (None, json.dumps(data), 'application/json'),
-            'file': fileobj
+            'file': (fileobj, fileobj.name.split('/')[-1])
         }
-        response = replicaserver.app.test_client().post(files=files)
+        response = replicaserver.app.test_client().post(data=payload)
         if response.status_code != 200:
             flask.abort(500)
         pass
