@@ -1,35 +1,22 @@
 """Test basic endpoint functions."""
 
 import hashlib
-from tests.d3b_client import d3b_client
+from tests.common import *
 
-c = d3b_client()
-
-def encrypt(salt, password):
-    """One way decryption given the plaintext pw and salt from user db."""
-    algorithm = 'sha512'
-
-    hash_obj = hashlib.new(algorithm)
-    password_salted = salt + password
-    hash_obj.update(password_salted.encode('utf-8'))
-    password_hash = hash_obj.hexdigest()
-    password_db_string = "$".join([algorithm, salt, password_hash])
-    return password_db_string
 
 def test_whoami():
     """Test get functionality using the whoami() logic from schema."""
 
-    logname = "dokastho"
     req_data = {
         "table": "schemas",
         "query": "SELECT * FROM tables WHERE owner = ?",
-        "args": [logname]
+        "args": [LOGNAME]
     }
     req_hdrs = {
         'content_type': 'application/json'
     }
     
-    post = c.get(req_data, req_hdrs)
+    post = C.get(req_data, req_hdrs)
     assert(len(post) > 0)
     
     # assert response content is (somewhat) valid
@@ -60,7 +47,7 @@ def test_login():
         'content_type': 'application/json'
     }
     
-    pw_hash = c.get(req_data, req_hdrs)
+    pw_hash = C.get(req_data, req_hdrs)
     if len(pw_hash) == 0:
         assert(False)
 
@@ -83,7 +70,7 @@ def test_login():
         'content_type': 'application/json'
     }
         
-    user = c.get(req_data, req_hdrs)
+    user = C.get(req_data, req_hdrs)
     if len(user) == 0:
         assert(False)
     

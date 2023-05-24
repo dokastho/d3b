@@ -10,7 +10,6 @@ class d3b_op:
     def __init__(self, json_data = None) -> None:
         self.data = json_data
         self.seed = randint(0, 0xffffffff)
-        self.flags = 0
 
         if len(json.dumps(json_data)) > PAXOS_BUFFER_LEN:
             raise Exception(f"Data overflowed Paxos buffer len: {PAXOS_BUFFER_LEN}")

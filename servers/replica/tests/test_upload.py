@@ -3,26 +3,13 @@
 import os
 import uuid
 import pathlib
-from tests.d3b_client import d3b_client
-
-c = d3b_client()
-logname = "dokastho"
-root = pathlib.Path(__file__).parent
-
-
-def get_uuid(filename):
-    """Get image uuid."""
-    stem = uuid.uuid4().hex
-    suffix = pathlib.Path(filename).suffix
-    uuid_basename = f"{stem}{suffix}"
-
-    return uuid_basename
+from tests.common import *
 
 
 def test_upload():
     """Upload a file and ensure that it returns OK."""
     filename = "test_blob.bin"
-    fpath = root / filename
+    fpath = ROOT / filename
     fileobj = open(fpath, 'rb')
 
     # create id for media
@@ -32,16 +19,16 @@ def test_upload():
     req_data = {
         "table": "schemas",
         "query": "INSERT INTO tables (owner, name, fileid) VALUES (?, ?, ?)",
-        "args": [logname, filename, fileid],
+        "args": [LOGNAME, filename, fileid],
         "media_op": "upload",
         "file_id": fileid
     }
     
-    c.file_post(req_data, fileobj)
+    C.file_post(req_data, fileobj)
     
     # cleanup
     try:
-        os.remove(root.parent / 'var' / fileid)
+        os.remove(ROOT.parent / 'var' / fileid)
     except:
         pass
     pass
@@ -50,7 +37,7 @@ def test_upload():
 def test_get():
     """Upload a file and ensure that subsequent get()'s return it."""
     filename = "test_blob.bin"
-    fpath = root / filename
+    fpath = ROOT / filename
     fileobj = open(fpath, 'rb')
 
     # create id for media
@@ -60,12 +47,12 @@ def test_get():
     req_data = {
         "table": "schemas",
         "query": "INSERT INTO tables (owner, name, fileid) VALUES (?, ?, ?)",
-        "args": [logname, filename, fileid],
+        "args": [LOGNAME, filename, fileid],
         "media_op": "upload",
         "file_id": fileid
     }
     
-    c.file_post(req_data, fileobj)
+    C.file_post(req_data, fileobj)
     
     # get
     req_data = {
@@ -79,7 +66,7 @@ def test_get():
         'content_type': 'application/json'
     }
 
-    data = c.file_get(req_data, req_hdrs)
+    data = C.file_get(req_data, req_hdrs)
     
     with open(fpath, 'rb') as fp:
         assert data == fp.read()
@@ -87,7 +74,7 @@ def test_get():
     
     # cleanup
     try:
-        os.remove(root.parent / 'var' / fileid)
+        os.remove(ROOT.parent / 'var' / fileid)
     except:
         pass
     pass
@@ -97,7 +84,7 @@ def test_delete():
     """Upload a file and then delete it."""
     
     filename = "test_blob.bin"
-    fpath = root / filename
+    fpath = ROOT / filename
     fileobj = open(fpath, 'rb')
 
     # create id for media
@@ -107,12 +94,12 @@ def test_delete():
     req_data = {
         "table": "schemas",
         "query": "INSERT INTO tables (owner, name, fileid) VALUES (?, ?, ?)",
-        "args": [logname, filename, fileid],
+        "args": [LOGNAME, filename, fileid],
         "media_op": "upload",
         "file_id": fileid
     }
     
-    c.file_post(req_data, fileobj)
+    C.file_post(req_data, fileobj)
     
     # delete
     req_data = {
@@ -126,5 +113,5 @@ def test_delete():
         'content_type': 'application/json'
     }
             
-    c.post(req_data, req_hdrs)
+    C.post(req_data, req_hdrs)
     pass
