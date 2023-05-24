@@ -54,4 +54,36 @@ def test_get():
 
 def test_delete():
     """Upload a file and then delete it."""
+    
+    filename = "test_blob.bin"
+    fpath = root / filename
+    fileobj = open(fpath, 'rb')
+
+    # create id for media
+    fileid = f'test-{get_uuid(filename)}'
+    
+    # make post request
+    req_data = {
+        "table": "schemas",
+        "query": "INSERT INTO tables (owner, name, fileid) VALUES (?, ?, ?)",
+        "args": [logname, filename, fileid],
+        "media_op": "upload",
+        "file_id": fileid
+    }
+    
+    c.file_post(req_data, fileobj)
+    
+    # delete
+    req_data = {
+        "table": "schemas",
+        "query": "DELETE FROM tables WHERE fileid = ?",
+        "args": [fileid],
+        "media_op": "delete",
+        "file_id": fileid
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+            
+    c.post(req_data, req_hdrs)
     pass
