@@ -1,14 +1,14 @@
 """Test applying operations in a group setting."""
 
 import pathlib
+from d3b_client.client import *
 from tests.common import *
-from tests.d3b_client import d3b_client_at_host
 
 
 def test_group():
     """Upload an image to one server, get it from another, delete it and flush log."""
 
-    alt_host = d3b_client_at_host("https://d3b1.dokasfam.com")
+    alt_host = d3b_client("https://d3b1.dokasfam.com")
 
     filename = "test_blob.bin"
     fpath = ROOT / filename

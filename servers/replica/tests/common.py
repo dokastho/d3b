@@ -2,9 +2,9 @@ import pathlib
 import uuid
 import hashlib
 
-from tests.d3b_client import d3b_client
+from tests.d3b_client import test_d3b_client
 
-C = d3b_client()
+C = test_d3b_client()
 LOGNAME = "dokastho"
 ROOT = pathlib.Path(__file__).parent
 

@@ -17,7 +17,6 @@ setup(
     install_requires=[
         'flask',
         'requests',
-        'json'
     ],
     python_requires='>=3.6'
 )

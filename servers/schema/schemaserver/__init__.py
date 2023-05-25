@@ -1,6 +1,6 @@
 """Package node initializer."""
 import flask
-from schemaserver.d3b_client import d3b_client
+from d3b_client.client import *
 # app is a single object used by all the code modules in this package
 app = flask.Flask(__name__)  # pylint: disable=invalid-name
 # Read settings from config module (site/config.py)

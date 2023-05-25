@@ -4,6 +4,7 @@ import flask
 import os
 from random import randint
 from pydrpc.drpc_client import *
+from d3b_client.client import *
 
 
 def dict_factory(cursor, row):
@@ -94,10 +95,28 @@ def apply_op(Op: replicaserver.d3b_op):
         if op == "upload":
             host_id = body["host_id"]
             my_id = replicaserver.app.config["MY_HOST_ID"]
-            blob = flask.request.files.get('file')
+            blob = None
             if host_id != my_id:
                 # get blob from peer
-                c = 
+                peer_host = f"d3b{host_id}.dokasfam.com"
+                c = d3b_client(peer_host)
+                
+                req_data = {
+                    "table": "schemas",
+                    "query": "SELECT * from tables WHERE fileid = ?",
+                    "args": [file_id],
+                    "media_op": "get",
+                    "file_id": file_id
+                }
+                req_hdrs = {
+                    'content_type': 'application/json'
+                }
+
+                blob = c.file_get(req_data, req_hdrs)
+                pass
+            else:
+                blob = flask.request.files.get('file')
+                pass
             # save file
             blob_path = replicaserver.app.config["UPLOAD_FOLDER"]/file_id
             blob.save(blob_path)

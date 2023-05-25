@@ -25,6 +25,8 @@ def parse_request():
                 flask.abort(400)
                 pass
             pass
+        # mark which host submitted this
+        body["host_id"] = replicaserver.app.config["MY_HOST_ID"]
         pass
 
     op = replicaserver.d3b_op(body)

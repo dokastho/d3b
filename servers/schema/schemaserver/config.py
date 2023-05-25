@@ -13,5 +13,5 @@ ALLOWED_EXTENSIONS = set(['sqlite3'])
 MAX_CONTENT_LENGTH = 1e9
 # Database file is var/db.sqlite3
 DATABASE_FILENAME = SITE_ROOT/'var'/'db.sqlite3'
-DB_HOST = "https://d3b.dokasfam.com"
-# DB_HOST = "https://dev2.dokasfam.com"
+# DB_HOST = "https://d3b1.dokasfam.com"
+DB_HOST = "https://dev2.dokasfam.com"
