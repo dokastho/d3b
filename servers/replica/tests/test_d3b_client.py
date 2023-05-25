@@ -36,8 +36,8 @@ class test_d3b_client:
             flask.abort(500)
         pass
 
-# copied from module
 class d3b_client:
+    """Copied from d3b_client package."""
     host: str
     
     def __init__(self, host: str) -> None:
