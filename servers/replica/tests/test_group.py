@@ -1,7 +1,7 @@
 """Test applying operations in a group setting."""
 
 import pathlib
-from d3b_client.client import *
+from tests.test_d3b_client import d3b_client
 from tests.common import *
 
 
