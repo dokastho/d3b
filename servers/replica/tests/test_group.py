@@ -27,7 +27,7 @@ def test_group():
         "file_id": fileid
     }
     
-    alt_host.file_post(req_data, fileobj)
+    alt_host.file_post(req_data, fileobj) # Fail here? Check that ./wsgi.py 1 is running
     
     # get from test host
     req_data = {

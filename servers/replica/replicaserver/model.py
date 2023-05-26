@@ -169,6 +169,7 @@ def add_op(Op: replicaserver.d3b_op):
     data = dict()
     while not logged:
         m.req.args.seq = replicaserver.seq
+        replicaserver.seq += 1
         c.Call(dh, m)
         logged = True
         data = apply_op(m.rep.args)
@@ -176,7 +177,6 @@ def add_op(Op: replicaserver.d3b_op):
         # continue logging if the value returned isn't the one we requested to log
         if m.rep.args.seed != m.req.args.seed:
             logged = False
-            replicaserver.seq += 1
             continue
 
         pass

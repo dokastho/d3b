@@ -29,8 +29,7 @@ def parse_request():
         body["host_id"] = replicaserver.app.config["MY_HOST_ID"]
         pass
 
-    op = replicaserver.d3b_op(replicaserver.seq, body)
-    replicaserver.seq += 1
+    op = replicaserver.d3b_op(json_data=body)
 
     # record this request in the paxos log
     data = replicaserver.add_op(op)
