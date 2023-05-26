@@ -15,5 +15,5 @@ Each request to this server should be a POST request with JSON content. This con
 
 ## Linked Repositories
 
-[CPPaxos distributed protocol](https://github.com/dokastho/CPPaxos)
-[DRPC rpc library](https://github.com/dokastho/drpc)
+- [CPPaxos distributed protocol](https://github.com/dokastho/CPPaxos)
+- [DRPC rpc library](https://github.com/dokastho/drpc)
