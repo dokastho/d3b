@@ -12,3 +12,8 @@ This web service allows me to upload & make changes to sqlite schemas on a distr
 ## Request Format
 
 Each request to this server should be a POST request with JSON content. This content is composed of a parameterized sql string and a list of arguments for that string.
+
+## Linked Repositories
+
+[CPPaxos distributed protocol](https://github.com/dokastho/CPPaxos)
+[DRPC rpc library](https://github.com/dokastho/drpc)
