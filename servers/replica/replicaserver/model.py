@@ -86,6 +86,8 @@ def apply_op(Op: replicaserver.d3b_op):
     cur = connection.execute(body["query"], body["args"])
     data = cur.fetchall()
     
+    close_db(None)
+    
     # if there's a media upload, get blob & save it
     if "media_op" in body:
         file_id = body["file_id"]
@@ -96,9 +98,10 @@ def apply_op(Op: replicaserver.d3b_op):
             host_id = body["host_id"]
             my_id = replicaserver.app.config["MY_HOST_ID"]
             blob = None
+            blob_path = replicaserver.app.config["UPLOAD_FOLDER"]/file_id
             if host_id != my_id:
                 # get blob from peer
-                peer_host = f"d3b{host_id}.dokasfam.com"
+                peer_host = f"https://d3b{host_id}.dokasfam.com"
                 c = d3b_client(peer_host)
                 
                 req_data = {
@@ -113,13 +116,16 @@ def apply_op(Op: replicaserver.d3b_op):
                 }
 
                 blob = c.file_get(req_data, req_hdrs)
+                # save file
+                with open(blob_path, "wb") as fp:
+                    fp.write(blob)
+                    pass
                 pass
             else:
                 blob = flask.request.files.get('file')
+                # save file
+                blob.save(blob_path)
                 pass
-            # save file
-            blob_path = replicaserver.app.config["UPLOAD_FOLDER"]/file_id
-            blob.save(blob_path)
             pass
         # delete
         elif op == "delete":
@@ -162,6 +168,7 @@ def add_op(Op: replicaserver.d3b_op):
     logged = False
     data = dict()
     while not logged:
+        m.req.args.seq = replicaserver.seq
         c.Call(dh, m)
         logged = True
         data = apply_op(m.rep.args)
@@ -169,6 +176,7 @@ def add_op(Op: replicaserver.d3b_op):
         # continue logging if the value returned isn't the one we requested to log
         if m.rep.args.seed != m.req.args.seed:
             logged = False
+            replicaserver.seq += 1
             continue
 
         pass

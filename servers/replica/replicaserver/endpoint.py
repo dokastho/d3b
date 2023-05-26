@@ -20,7 +20,7 @@ def parse_request():
     
     # if media in request, ensure request has requisite info
     if "media_op" in body:
-        for arg in ["file_id", "host_id"]:
+        for arg in ["file_id"]:
             if arg not in body:
                 flask.abort(400)
                 pass
@@ -29,7 +29,8 @@ def parse_request():
         body["host_id"] = replicaserver.app.config["MY_HOST_ID"]
         pass
 
-    op = replicaserver.d3b_op(body)
+    op = replicaserver.d3b_op(replicaserver.seq, body)
+    replicaserver.seq += 1
 
     # record this request in the paxos log
     data = replicaserver.add_op(op)

@@ -16,6 +16,9 @@ app.config.from_envvar('SITE_SETTINGS', silent=True)
 # shared lock
 seq_lock = Lock()
 
+# paxos seq num
+seq = 0
+
 from replicaserver.rpcs import *
 from replicaserver.common import *
 from replicaserver.model import *

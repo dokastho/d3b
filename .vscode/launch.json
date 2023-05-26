@@ -5,6 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "WSGI REPLICA",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/servers/replica/wsgi.py",
+            "args": [
+                "1"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
             "name": "SCHEMA",
             "type": "python",
             "request": "launch",

@@ -1,6 +1,6 @@
 """Test applying operations in a group setting."""
 
-import pathlib
+import os
 from tests.test_d3b_client import d3b_client
 from tests.common import *
 
@@ -9,6 +9,7 @@ def test_group():
     """Upload an image to one server, get it from another, delete it and flush log."""
 
     alt_host = d3b_client("https://d3b1.dokasfam.com")
+    # alt_host = d3b_client("https://dev2.dokasfam.com")
 
     filename = "test_blob.bin"
     fpath = ROOT / filename
@@ -72,8 +73,22 @@ def test_group():
 
     data1 = alt_host.get(req_data, req_hdrs)
     
-    data2 = C.get(req_data, req_hdrs)
+    # file was deleted?
     
+    assert not fileid in os.listdir(ROOT.parent / "var")
+    
+    # replace it and try again
+    with open(ROOT.parent / "var" / fileid, "wb") as fp:
+        fp.write(data)
+        pass
+    
+    data2 = C.get(req_data, req_hdrs)
+
+    # assert file deleted again
+    
+    assert not fileid in os.listdir(ROOT.parent / "var")
+    
+    # assert return same
     assert data1 == data2
     pass
     

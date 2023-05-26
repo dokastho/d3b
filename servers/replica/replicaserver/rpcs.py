@@ -7,8 +7,9 @@ class d3b_op:
     seed: int
     data: json
 
-    def __init__(self, json_data = None) -> None:
+    def __init__(self, seq = 0, json_data = None) -> None:
         self.data = json_data
+        self.seq = seq
         self.seed = randint(0, 0xffffffff)
 
         if len(json.dumps(json_data)) > PAXOS_BUFFER_LEN:
@@ -19,12 +20,13 @@ class d3b_op:
     def __bytes__(self) -> bytes:
         bb = json.dumps(self.data).encode("ascii")
         bb += (PAXOS_BUFFER_LEN - len(bb)) * b'\x00'
-        bb = self.seed.to_bytes(4, "little") + bb
+        bb = self.seed.to_bytes(4, "little") + self.seq.to_bytes(4, "little") + bb
         return bb
 
     def serialize(self, data: bytes):
         self.seed = int.from_bytes(data[:4], "little")
-        data = data[4:].decode('ascii').replace('\x00', '')
+        self.seq = int.from_bytes(data[4:8], "little")
+        data = data[8:].decode('ascii').replace('\x00', '')
         self.data = json.loads(data)
         pass
 
