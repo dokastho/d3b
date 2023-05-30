@@ -17,3 +17,4 @@ PAXOS_HOSTS = ["localhost", "localhost", "localhost"]
 PAXOS_PORTS = [8124, 8125, 8126]
 PAXOS_ENDPOINT = "Paxos"
 MY_HOST_ID = 0
+TIMEOUT_VAL = 10.0

@@ -164,13 +164,19 @@ def add_op(Op: replicaserver.d3b_op):
     m.rep = rep
     m.target = replicaserver.app.config["PAXOS_ENDPOINT"]
 
-    c = drpc_client()
+    c = drpc_client(timeout_val=replicaserver.app.config["TIMEOUT_VAL"])
     logged = False
     data = dict()
     while not logged:
         m.req.args.seq = replicaserver.seq
+        m.rep.args.err = 1
         replicaserver.seq += 1
-        c.Call(dh, m)
+        while m.rep.args.err != 0:
+            err = c.Call(dh, m)
+            if err == -1:
+                print("error reaching paxos servers")
+                exit(1)
+            pass
         logged = True
         data = apply_op(m.rep.args)
 
