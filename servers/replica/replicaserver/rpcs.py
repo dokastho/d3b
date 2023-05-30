@@ -12,6 +12,7 @@ class d3b_op:
     def __init__(self, seq = 0, json_data = None) -> None:
         self.data = json_data
         self.seq = seq
+        self.err = 0
         self.seed = randint(0, 0xffffffff)
 
         if len(json.dumps(json_data)) > PAXOS_BUFFER_LEN:
