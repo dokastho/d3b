@@ -106,8 +106,8 @@ def apply_op(Op: replicaserver.d3b_op):
                 
                 req_data = {
                     "table": "schemas",
-                    "query": "SELECT * from tables WHERE fileid = ?",
-                    "args": [file_id],
+                    "query": "",
+                    "args": [],
                     "media_op": "get",
                     "file_id": file_id
                 }

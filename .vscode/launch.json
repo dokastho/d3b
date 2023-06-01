@@ -57,7 +57,7 @@
             "name": "PAXOS",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "program": "${workspaceFolder}/servers/paxos/paxos_server",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

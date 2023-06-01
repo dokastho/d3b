@@ -17,7 +17,7 @@ def test_group():
 
     # create id for media
     fileid = f'test-{get_uuid(filename)}'
-    
+
     # upload image to other host
     req_data = {
         "table": "schemas",
@@ -26,14 +26,29 @@ def test_group():
         "media_op": "upload",
         "file_id": fileid
     }
-    
-    alt_host.file_post(req_data, fileobj) # Fail here? Check that ./wsgi.py 1 is running
-    
+
+    # Fail here? Check that ./wsgi.py 1 is running
+    alt_host.file_post(req_data, fileobj)
+
     # get from test host
+
+    # start by "getting fileid"
     req_data = {
         "table": "schemas",
-        "query": "SELECT * from tables WHERE fileid = ?",
-        "args": [fileid],
+        "query": "SELECT * FROM tables WHERE owner = ?",
+        "args": [LOGNAME]
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+    
+    data = C.get(req_data, req_hdrs)
+
+    # get file
+    req_data = {
+        "table": "schemas",
+        "query": "",
+        "args": [],
         "media_op": "get",
         "file_id": fileid
     }
@@ -42,11 +57,11 @@ def test_group():
     }
 
     data = C.file_get(req_data, req_hdrs)
-    
+
     with open(fpath, 'rb') as fp:
         assert data == fp.read()
         pass
-    
+
     # delete
     req_data = {
         "table": "schemas",
@@ -58,7 +73,7 @@ def test_group():
     req_hdrs = {
         'content_type': 'application/json'
     }
-    
+
     alt_host.post(req_data, req_hdrs)
 
     # flush log for both
@@ -72,23 +87,22 @@ def test_group():
     }
 
     data1 = alt_host.get(req_data, req_hdrs)
-    
+
     # file was deleted?
-    
+
     assert not fileid in os.listdir(ROOT.parent / "var")
-    
+
     # replace it and try again
     with open(ROOT.parent / "var" / fileid, "wb") as fp:
         fp.write(data)
         pass
-    
+
     data2 = C.get(req_data, req_hdrs)
 
     # assert file deleted again
-    
+
     assert not fileid in os.listdir(ROOT.parent / "var")
-    
+
     # assert return same
     assert data1 == data2
     pass
-    

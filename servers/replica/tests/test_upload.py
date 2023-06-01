@@ -57,8 +57,8 @@ def test_get():
     # get
     req_data = {
         "table": "schemas",
-        "query": "SELECT * from tables WHERE fileid = ?",
-        "args": [fileid],
+        "query": "",
+        "args": [],
         "media_op": "get",
         "file_id": fileid
     }
