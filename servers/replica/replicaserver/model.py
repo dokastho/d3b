@@ -143,10 +143,10 @@ def apply_op(Op: replicaserver.d3b_op):
 def add_op(Op: replicaserver.d3b_op):
     """perform db updates until after request is returned"""
 
-    # want random host
+    # want assigned host
     dh = drpc_host()
     hosts = replicaserver.app.config["PAXOS_HOSTS"]
-    host_idx = randint(0, len(hosts) - 1)
+    host_idx = replicaserver.app.config["MY_HOST_ID"] - 1
     dh.hostname = hosts[host_idx]
     dh.port = replicaserver.app.config["PAXOS_PORTS"][host_idx]
 
@@ -177,7 +177,7 @@ def add_op(Op: replicaserver.d3b_op):
                 print("error reaching paxos servers")
                 exit(1)
             pass
-        logged = True
+        logged = True 
         data = apply_op(m.rep.args)
 
         # continue logging if the value returned isn't the one we requested to log
