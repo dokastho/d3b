@@ -25,9 +25,21 @@ case $1 in
     ;;
   "reset")
     rm -rf var/schemas.sqlite3 var/uploads
+    rm -rf var-1/schemas.sqlite3 var-1/uploads
+    rm -rf var-2/schemas.sqlite3 var-2/uploads
+    rm -rf var-3/schemas.sqlite3 var-3/uploads
     mkdir -p var/uploads
+    mkdir -p var-1/uploads
+    mkdir -p var-2/uploads
+    mkdir -p var-3/uploads
     sqlite3 var/schemas.sqlite3 < sql/schema.sql
     sqlite3 var/schemas.sqlite3 < sql/data.sql
+    sqlite3 var-1/schemas.sqlite3 < sql/schema.sql
+    sqlite3 var-1/schemas.sqlite3 < sql/data.sql
+    sqlite3 var-2/schemas.sqlite3 < sql/schema.sql
+    sqlite3 var-2/schemas.sqlite3 < sql/data.sql
+    sqlite3 var-3/schemas.sqlite3 < sql/schema.sql
+    sqlite3 var-3/schemas.sqlite3 < sql/data.sql
     ;;
   "users") sqlite3 -batch -line var/schemas.sqlite3 'select * from users';;
   "dump")
