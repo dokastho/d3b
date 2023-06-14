@@ -185,7 +185,17 @@ def add_op(Op: replicaserver.d3b_op):
             pass
         logged = True
         data = apply_op(m.rep.args)
-        replicaserver.logger.log(f"for request[{m.req.args.seed}]: {m.req.args.data} applied[{m.rep.args.seed}]: {m.rep.args.data}")
+        log_data = {
+            "request" : {
+                "seed": m.req.args.seed,
+                "op": m.req.args.data
+            },
+            "reply" : {
+                "seed": m.rep.args.seed,
+                "op": m.rep.args.data
+            },
+        }
+        replicaserver.my_logger.log(json.dumps(log_data) )
 
         # continue logging if the value returned isn't the one we requested to log
         if m.rep.args.seed != m.req.args.seed:

@@ -22,7 +22,7 @@ seq_lock = Lock()
 seq = 0
 
 # logger
-logger = Logger(app.config["SITE_ROOT"] / app.config["LOGFILENAME"])
+my_logger = Logger(app.config["SITE_ROOT"] / app.config["LOGFILENAME"])
 
 from replicaserver.rpcs import *
 from replicaserver.common import *
