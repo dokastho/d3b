@@ -51,7 +51,7 @@ def get_table_uuid(table):
         (table,)
     )
     uuid = cur.fetchone()
-    if len(uuid) == 0:
+    if uuid is None:
         flask.abort(404)
     
     # close
