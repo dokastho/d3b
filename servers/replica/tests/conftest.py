@@ -27,26 +27,8 @@ class paxos_restart_op:
 @pytest.fixture(autouse=True)
 def run_before_and_after_tests():
     """Fixture to execute asserts before and after a test is run"""
-    # reset seq num
-    replicaserver.seq = 0
-
-    # restart paxos server
     test_run_lock.acquire()
-    paxos_host = drpc_host()
-    paxos_host.hostname = "localhost"
-    paxos_host.port = 5854
-
-    req = paxos_restart_op(15)
-    rep = paxos_restart_op(0)
-    mreq = drpc_arg_wrapper(req)
-    mrep = drpc_arg_wrapper(rep)
-    msg = drpc_msg()
-    msg.req = mreq
-    msg.rep = mrep
-    msg.target = "restart"
-
-    c = drpc_client()
-    c.Call(paxos_host, msg)
+    replicaserver.restart_paxos()
 
     yield
 

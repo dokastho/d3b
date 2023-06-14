@@ -23,3 +23,4 @@ from replicaserver.rpcs import *
 from replicaserver.common import *
 from replicaserver.model import *
 from replicaserver.endpoint import *
+from replicaserver.paxos import *

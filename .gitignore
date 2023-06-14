@@ -139,3 +139,4 @@ dmypy.json
 paxos_server
 *.h
 *.out
+one_paxos_server

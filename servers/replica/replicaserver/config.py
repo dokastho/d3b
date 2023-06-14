@@ -16,5 +16,6 @@ MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 # RPC server
 PAXOS_HOSTS = ["localhost", "localhost", "localhost"]
 PAXOS_PORTS = [8124, 8125, 8126]
+PAXOS_CTRL_PORT = 5854
 PAXOS_ENDPOINT = "Paxos"
 TIMEOUT_VAL = 1.0

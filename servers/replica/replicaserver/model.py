@@ -75,9 +75,11 @@ def close_db(error):
         sqlite_db.close()
 
 
-def apply_op(Op: replicaserver.d3b_op):
+def  apply_op(Op: replicaserver.d3b_op):
     """Apply a database operation returned from the paxos process."""
     replicaserver.seq_lock.acquire()
+    
+    # check if op already applied
 
     # perform database operation
     body = Op.data
@@ -135,6 +137,8 @@ def apply_op(Op: replicaserver.d3b_op):
             pass
 
         pass
+    
+    # mark op as applied
 
     replicaserver.seq_lock.release()
     return data
