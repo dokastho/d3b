@@ -35,7 +35,7 @@ def get_db(table_id: str):
 
 def get_table_uuid(table):
     """Get table uuid."""
-    
+
     # set up connection with translational table
     db_path = replicaserver.app.config['UPLOAD_FOLDER']
     db_filename = db_path / "schemas.sqlite3"
@@ -52,12 +52,13 @@ def get_table_uuid(table):
     )
     uuid = cur.fetchone()
     if uuid is None:
-        flask.abort(404)
-    
+        connection.close()
+        raise Exception()
+
     # close
     connection.commit()
     connection.close()
-    
+
     return uuid['fileid']
 
 
@@ -75,26 +76,29 @@ def close_db(error):
         sqlite_db.close()
 
 
-def  apply_op(Op: replicaserver.d3b_op):
+def apply_op(Op: replicaserver.d3b_op):
     """Apply a database operation returned from the paxos process."""
     replicaserver.seq_lock.acquire()
-    
-    # check if op already applied
 
     # perform database operation
-    body = Op.data
-    table_uuid = get_table_uuid(body["table"])
-    connection = get_db(table_uuid)
-    cur = connection.execute(body["query"], body["args"])
-    data = cur.fetchall()
-    
+    try:
+        body = Op.data
+        table_uuid = get_table_uuid(body["table"])
+        connection = get_db(table_uuid)
+        cur = connection.execute(body["query"], body["args"])
+        data = cur.fetchall()
+    except:
+        Op.data["error"] = "not applied"
+        replicaserver.seq_lock.release()
+        return Op.data
+
     close_db(None)
-    
+
     # if there's a media upload, get blob & save it
     if "media_op" in body:
         file_id = body["file_id"]
         op = body["media_op"]
-        
+
         # upload
         if op == "upload":
             host_id = body["host_id"]
@@ -105,7 +109,7 @@ def  apply_op(Op: replicaserver.d3b_op):
                 # get blob from peer
                 peer_host = f"https://d3b{host_id}.dokasfam.com"
                 c = d3b_client(peer_host)
-                
+
                 req_data = {
                     "table": "schemas",
                     "query": "",
@@ -137,8 +141,6 @@ def  apply_op(Op: replicaserver.d3b_op):
             pass
 
         pass
-    
-    # mark op as applied
 
     replicaserver.seq_lock.release()
     return data
@@ -181,8 +183,9 @@ def add_op(Op: replicaserver.d3b_op):
                 print("error reaching paxos servers")
                 exit(1)
             pass
-        logged = True 
+        logged = True
         data = apply_op(m.rep.args)
+        replicaserver.logger.log(f"for request[{m.req.args.seed}]: {m.req.args.data} applied[{m.rep.args.seed}]: {m.rep.args.data}")
 
         # continue logging if the value returned isn't the one we requested to log
         if m.rep.args.seed != m.req.args.seed:

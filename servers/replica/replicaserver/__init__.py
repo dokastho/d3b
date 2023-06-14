@@ -1,6 +1,8 @@
 """Package node initializer."""
 import flask
 from threading import Lock
+from replicaserver.logger import Logger
+
 # app is a single object used by all the code modules in this package
 app = flask.Flask(__name__)  # pylint: disable=invalid-name
 # Read settings from config module (site/config.py)
@@ -18,6 +20,9 @@ seq_lock = Lock()
 
 # paxos seq num
 seq = 0
+
+# logger
+logger = Logger(app.config["SITE_ROOT"] / app.config["LOGFILENAME"])
 
 from replicaserver.rpcs import *
 from replicaserver.common import *
