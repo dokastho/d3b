@@ -24,7 +24,7 @@ def get_account_info():
         'content_type': 'application/json'
     }
         
-    post = schemaserver.db.get(req_data, req_hdrs)
+    post = schemaserver.get_client().get(req_data, req_hdrs)
 
     data["schemas"] = post
 

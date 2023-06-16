@@ -35,7 +35,7 @@ def upload_schema():
                 "file_id": fileid
             }
             
-            schemaserver.db.file_post(req_data, fileobj)
+            schemaserver.get_client().file_post(req_data, fileobj)
 
         else:
             flask.abort(400)
@@ -69,7 +69,7 @@ def delete_schema():
             'content_type': 'application/json'
         }
             
-        post = schemaserver.db.get(req_data, req_hdrs)
+        post = schemaserver.get_client().get(req_data, req_hdrs)
 
         if len(post) == []:
             flask.abort(404)
@@ -89,7 +89,7 @@ def delete_schema():
             'content_type': 'application/json'
         }
             
-        schemaserver.db.post(req_data, req_hdrs)
+        schemaserver.get_client().post(req_data, req_hdrs)
         
         return flask.Response(status=204)
 

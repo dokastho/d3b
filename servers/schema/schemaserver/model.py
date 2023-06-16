@@ -76,7 +76,7 @@ def check_authorization(username=None, password=None):
         'content_type': 'application/json'
     }
         
-    pw_hash = schemaserver.db.get(req_data, req_hdrs)
+    pw_hash = schemaserver.get_client().get(req_data, req_hdrs)
     if len(pw_hash) == 0:
         return False
 
@@ -99,7 +99,7 @@ def check_authorization(username=None, password=None):
         'content_type': 'application/json'
     }
         
-    user = schemaserver.db.get(req_data, req_hdrs)
+    user = schemaserver.get_client().get(req_data, req_hdrs)
     if len(user) == 0:
         return False
 

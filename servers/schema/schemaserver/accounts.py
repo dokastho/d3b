@@ -97,7 +97,7 @@ def do_create(info):
         'content_type': 'application/json'
     }
         
-    user = schemaserver.db.get(req_data, req_hdrs)
+    user = schemaserver.get_client().get(req_data, req_hdrs)
 
     if len(user) != 0:
         abort(409)
@@ -112,7 +112,7 @@ def do_create(info):
         'content_type': 'application/json'
     }
         
-    schemaserver.db.post(req_data, req_hdrs)
+    schemaserver.get_client().post(req_data, req_hdrs)
 
     return True
 
@@ -135,7 +135,7 @@ def do_delete():
         'content_type': 'application/json'
     }
         
-    schemaserver.db.post(req_data, req_hdrs)
+    schemaserver.get_client().post(req_data, req_hdrs)
 
     # clear the session
     session.clear()
@@ -156,7 +156,7 @@ def do_update_password(info):
         'content_type': 'application/json'
     }
         
-    old_pw_hash = schemaserver.db.get(req_data, req_hdrs)
+    old_pw_hash = schemaserver.get_client().get(req_data, req_hdrs)
     old_pw_hash = old_pw_hash[0]
 
     # check if salt is present (default data isn't encrypted)
@@ -177,7 +177,7 @@ def do_update_password(info):
         'content_type': 'application/json'
     }
         
-    user = schemaserver.db.get(req_data, req_hdrs)
+    user = schemaserver.get_client().get(req_data, req_hdrs)
     if len(user) == 0:
         abort(403)
 
@@ -194,7 +194,7 @@ def do_update_password(info):
         'content_type': 'application/json'
     }
         
-    schemaserver.db.post(req_data, req_hdrs)
+    schemaserver.get_client().post(req_data, req_hdrs)
 
 
 @schemaserver.app.route('/accounts/login/')

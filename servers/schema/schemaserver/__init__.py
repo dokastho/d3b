@@ -13,12 +13,10 @@ app.config.from_object('schemaserver.config')
 # $ export SITE_SETTINGS=secret_key_config.py
 app.config.from_envvar('SITE_SETTINGS', silent=True)
 
-# client connection to databse
-db = d3b_client(app.config['DB_HOST'])
-
 
 from schemaserver.views import *
 from schemaserver.accounts import *
 from schemaserver.api import *
 from schemaserver.model import *
 from schemaserver.schema import *
+from schemaserver.utils import *

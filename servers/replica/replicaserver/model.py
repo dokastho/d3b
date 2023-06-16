@@ -88,6 +88,9 @@ def apply_op(Op: replicaserver.d3b_op):
         cur = connection.execute(body["query"], body["args"])
         data = cur.fetchall()
     except:
+        if Op.data is None:
+            Op.data = dict()
+            pass
         Op.data["error"] = "not applied"
         replicaserver.seq_lock.release()
         return Op.data
