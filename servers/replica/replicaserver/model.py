@@ -190,10 +190,12 @@ def add_op(Op: replicaserver.d3b_op):
         data = apply_op(m.rep.args)
         log_data = {
             "request" : {
+                "seq": m.req.args.seq,
                 "seed": m.req.args.seed,
                 "op": m.req.args.data
             },
             "reply" : {
+                "seq": m.rep.args.seq,
                 "seed": m.rep.args.seed,
                 "op": m.rep.args.data
             },
