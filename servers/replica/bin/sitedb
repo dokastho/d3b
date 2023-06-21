@@ -25,9 +25,12 @@ case $1 in
     ;;
   "reset")
     rm -rf var/schemas.sqlite3 var/uploads
-    rm -rf var-1/schemas.sqlite3 var-1/uploads
-    rm -rf var-2/schemas.sqlite3 var-2/uploads
-    rm -rf var-3/schemas.sqlite3 var-3/uploads
+    rm -rf var-1/*
+    rm -rf var-2/*
+    rm -rf var-3/*
+    rm -rf d3b1-log.log
+    rm -rf d3b2-log.log
+    rm -rf d3b3-log.log
     mkdir -p var/uploads
     mkdir -p var-1/uploads
     mkdir -p var-2/uploads
@@ -40,12 +43,15 @@ case $1 in
     sqlite3 var-2/schemas.sqlite3 < sql/data.sql
     sqlite3 var-3/schemas.sqlite3 < sql/schema.sql
     sqlite3 var-3/schemas.sqlite3 < sql/data.sql
+    cp var/img_* var-1/
+    cp var/img_* var-2/
+    cp var/img_* var-3/
     ;;
   "users") sqlite3 -batch -line var/schemas.sqlite3 'select * from users';;
   "dump")
     sqlite3 -batch -line var/schemas.sqlite3 'select * from users'
 
-    sqlite3 -batch -line var/schemas.sqlite3 'select * from schemas'
+    sqlite3 -batch -line var/schemas.sqlite3 'select * from tables'
     ;;
   *)
     usage

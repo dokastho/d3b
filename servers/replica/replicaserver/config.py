@@ -18,5 +18,5 @@ PAXOS_HOSTS = ["localhost", "localhost", "localhost"]
 PAXOS_PORTS = [8124, 8125, 8126]
 PAXOS_CTRL_PORT = 5854
 PAXOS_ENDPOINT = "Paxos"
-TIMEOUT_VAL = 1.0
+TIMEOUT_VAL = 1.0 * 60
 LOGFILENAME = f"d3b{MY_HOST_ID}-log.log"

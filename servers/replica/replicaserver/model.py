@@ -78,7 +78,6 @@ def close_db(error):
 
 def apply_op(Op: replicaserver.d3b_op):
     """Apply a database operation returned from the paxos process."""
-    replicaserver.seq_lock.acquire()
 
     # perform database operation
     try:
@@ -92,7 +91,6 @@ def apply_op(Op: replicaserver.d3b_op):
             Op.data = dict()
             pass
         Op.data["error"] = "not applied"
-        replicaserver.seq_lock.release()
         return Op.data
 
     close_db(None)
@@ -145,13 +143,13 @@ def apply_op(Op: replicaserver.d3b_op):
 
         pass
 
-    replicaserver.seq_lock.release()
     return data
 
 
 def add_op(Op: replicaserver.d3b_op):
     """perform db updates until after request is returned"""
 
+    replicaserver.seq_lock.acquire()
     # want assigned host
     dh = drpc_host()
     hosts = replicaserver.app.config["PAXOS_HOSTS"]
@@ -208,4 +206,5 @@ def add_op(Op: replicaserver.d3b_op):
             continue
 
         pass
+    replicaserver.seq_lock.release()
     return data

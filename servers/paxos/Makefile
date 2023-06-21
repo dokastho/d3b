@@ -26,6 +26,7 @@ headers:
 	cp ../../../CPPaxos/Logger.h .
 	cp ../../../CPPaxos/paxos.h .
 	cp ../../../CPPaxos/rpcs.h .
+	cp ../../../CPPaxos/Channel.h .
 
 # rule for creating objects
 %.o: %.cpp

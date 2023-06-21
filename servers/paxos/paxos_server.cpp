@@ -51,7 +51,6 @@ class runner
 {
 private:
     drpc_server *drpc_engine;
-    std::thread drpc_engine_thread;
     std::mutex restart_lock;
 
 public:
@@ -62,8 +61,7 @@ public:
         drpc_engine = new drpc_server(my_host, this);
         servers = new PaxosGroup(NPAXOS);
         drpc_engine->publish_endpoint("restart", (void*)runner::run);
-        std::thread t(&drpc_server::run_server, drpc_engine);
-        drpc_engine_thread = std::move(t);
+        drpc_engine->start();
     }
     static void run(runner* rn, drpc_msg &m)
     {
@@ -86,7 +84,6 @@ public:
     ~runner()
     {
         delete drpc_engine;
-        drpc_engine_thread.join();
     }
 
 };
