@@ -4,7 +4,7 @@ Dokasfam Distributed Database: A restful distributed database webserver
 
 ## Summary
 
-This webserver provides linearized replicated state across multiple endpoints. It uses an associated schema webserver ([servers/schema]()) to manage the underlying .sqlite3 database files that the replica can use. This program uses [Paxos](https://github.com/dokastho/cppaxos) to provide a sequence of operations for an arbitrary amount of replicas to commit. Each d3b replica has an associated locally-hosted Paxos server for making database operations with. For more information on how Paxos works, read this [super helpful guide](https://martinfowler.com/articles/patterns-of-distributed-systems/paxos.html).
+This webserver provides linearized replicated state across multiple endpoints. It uses an associated [schema webserver](servers/schema) to manage the underlying .sqlite3 database files that the replica can use. This program uses [Paxos](https://github.com/dokastho/cppaxos) to provide a sequence of operations for an arbitrary amount of replicas to commit. Each d3b replica has an associated locally-hosted Paxos server for making database operations with. For more information on how Paxos works, read this [super helpful guide](https://martinfowler.com/articles/patterns-of-distributed-systems/paxos.html).
 
 ## Schema Server
 
