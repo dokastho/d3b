@@ -46,6 +46,9 @@ case $1 in
     cp var/img_* var-1/
     cp var/img_* var-2/
     cp var/img_* var-3/
+    cp var/profile.jpg var-1/
+    cp var/profile.jpg var-2/
+    cp var/profile.jpg var-3/
     ;;
   "users") sqlite3 -batch -line var/schemas.sqlite3 'select * from users';;
   "dump")
