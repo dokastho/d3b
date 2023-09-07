@@ -8,8 +8,8 @@ from tests.common import *
 def test_group():
     """Upload an image to one server, get it from another, delete it and flush log."""
 
-    alt_host = d3b_client("https://d3b2.dokasfam.com")
-    # alt_host = d3b_client("https://dev2.dokasfam.com")
+    alt_host = d3b_client("https://d3b2.dokastho.io")
+    # alt_host = d3b_client("https://dev2.dokastho.io")
 
     filename = "test_blob.bin"
     fpath = ROOT / filename

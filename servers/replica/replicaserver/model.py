@@ -108,7 +108,7 @@ def apply_op(Op: replicaserver.d3b_op):
             blob_path = replicaserver.app.config["UPLOAD_FOLDER"]/file_id
             if host_id != my_id:
                 # get blob from peer
-                peer_host = f"https://d3b{host_id}.dokasfam.com"
+                peer_host = f"https://d3b{host_id}.dokastho.io"
                 c = d3b_client(peer_host)
 
                 req_data = {
