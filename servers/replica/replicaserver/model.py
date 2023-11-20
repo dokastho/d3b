@@ -178,12 +178,16 @@ def add_op(Op: replicaserver.d3b_op):
         m.req.args.seq = replicaserver.seq
         m.rep.args.err = 1
         replicaserver.seq += 1
-        while m.rep.args.err != 0:
+        while m.rep.args.err == 1:
             err = c.Call(dh, m)
             if err == -1:
                 print("error reaching paxos servers")
                 exit(1)
             pass
+        if m.rep.args.err == 2:
+            # forgotten
+            continue
+            
         logged = True
         data = apply_op(m.rep.args)
         log_data = {

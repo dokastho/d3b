@@ -34,6 +34,36 @@ def test_upload():
     pass
 
 
+def test_many_upload():
+    """Upload a file and ensure that it returns OK."""
+    filename = "test_blob.bin"
+    fpath = ROOT / filename
+    
+    for i in range(256):
+        fileobj = open(fpath, 'rb')
+        # create id for media
+        fileid = f'test-{get_uuid(filename)}-{i}'
+        
+        # make post request
+        req_data = {
+            "table": "schemas",
+            "query": "INSERT INTO tables (owner, name, fileid) VALUES (?, ?, ?)",
+            "args": [LOGNAME, filename, fileid],
+            "media_op": "upload",
+            "file_id": fileid
+        }
+        
+        C.file_post(req_data, fileobj)
+        
+        # cleanup
+        try:
+            os.remove(ROOT.parent / 'var' / fileid)
+        except:
+            pass
+        pass
+    pass
+
+
 def test_get():
     """Upload a file and ensure that subsequent get()'s return it."""
     filename = "test_blob.bin"
