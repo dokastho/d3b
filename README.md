@@ -1,6 +1,6 @@
 # d3b
 
-Dokasfam Distributed Database: A restful distributed database webserver
+Dokastho Distributed Database: A restful distributed database webserver
 
 ## Summary
 
